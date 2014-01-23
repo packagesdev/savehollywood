@@ -1,0 +1,449 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F4015D19169CB3C000560296 /* SHConfigurationWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = F4015D16169CB3C000560296 /* SHConfigurationWindowController.h */; };
+		F4015D1A169CB3C000560296 /* SHConfigurationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4015D17169CB3C000560296 /* SHConfigurationWindowController.m */; };
+		F4015D1F169CB47D00560296 /* SHUserDefaults+Constants.h in Headers */ = {isa = PBXBuildFile; fileRef = F4015D1D169CB47D00560296 /* SHUserDefaults+Constants.h */; };
+		F4015D20169CB47D00560296 /* SHUserDefaults+Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = F4015D1E169CB47D00560296 /* SHUserDefaults+Constants.m */; };
+		F40427CF169B76CB00B146F7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F40427CE169B76CB00B146F7 /* Cocoa.framework */; };
+		F40427D1169B76CB00B146F7 /* ScreenSaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F40427D0169B76CB00B146F7 /* ScreenSaver.framework */; };
+		F40427DF169B76CB00B146F7 /* SaveHollywoodView.m in Sources */ = {isa = PBXBuildFile; fileRef = F40427DE169B76CB00B146F7 /* SaveHollywoodView.m */; };
+		F40427E6169B76E600B146F7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F40427E5169B76E600B146F7 /* AVFoundation.framework */; };
+		F40427E8169B76F600B146F7 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F40427E7169B76F600B146F7 /* CoreMedia.framework */; };
+		F405C93016DC01D700EFDF39 /* SHTokenView.h in Headers */ = {isa = PBXBuildFile; fileRef = F405C92E16DC01D700EFDF39 /* SHTokenView.h */; };
+		F405C93116DC01D700EFDF39 /* SHTokenView.m in Sources */ = {isa = PBXBuildFile; fileRef = F405C92F16DC01D700EFDF39 /* SHTokenView.m */; };
+		F4066EA7170760EA00EBE7D0 /* thumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = F4066EA5170760EA00EBE7D0 /* thumbnail.png */; };
+		F4066EA8170760EA00EBE7D0 /* thumbnail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F4066EA6170760EA00EBE7D0 /* thumbnail@2x.png */; };
+		F40B998B16AB1F6200644F61 /* NSColor+String.h in Headers */ = {isa = PBXBuildFile; fileRef = F40B998916AB1F6200644F61 /* NSColor+String.h */; };
+		F40B998C16AB1F6200644F61 /* NSColor+String.m in Sources */ = {isa = PBXBuildFile; fileRef = F40B998A16AB1F6200644F61 /* NSColor+String.m */; };
+		F434961B16B701B500C549DF /* Localized.strings in Resources */ = {isa = PBXBuildFile; fileRef = F434961916B701B500C549DF /* Localized.strings */; };
+		F4AB34BE16BED1CF00015DB9 /* SHAssetTableCellView.h in Headers */ = {isa = PBXBuildFile; fileRef = F4AB34BC16BED1CF00015DB9 /* SHAssetTableCellView.h */; };
+		F4AB34BF16BED1CF00015DB9 /* SHAssetTableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4AB34BD16BED1CF00015DB9 /* SHAssetTableCellView.m */; };
+		F4B3933316ED43C40061B52E /* SHSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = F4B3933116ED43C40061B52E /* SHSlider.h */; };
+		F4B3933416ED43C40061B52E /* SHSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = F4B3933216ED43C40061B52E /* SHSlider.m */; };
+		F4B9BCEE16D54A8B00051854 /* NSIndexSet+Analysis.h in Headers */ = {isa = PBXBuildFile; fileRef = F4B9BCEC16D54A8B00051854 /* NSIndexSet+Analysis.h */; };
+		F4B9BCEF16D54A8B00051854 /* NSIndexSet+Analysis.m in Sources */ = {isa = PBXBuildFile; fileRef = F4B9BCED16D54A8B00051854 /* NSIndexSet+Analysis.m */; };
+		F4BB43A516BD387100443067 /* SHSecondaryBox.h in Headers */ = {isa = PBXBuildFile; fileRef = F4BB43A316BD387100443067 /* SHSecondaryBox.h */; };
+		F4BB43A616BD387100443067 /* SHSecondaryBox.m in Sources */ = {isa = PBXBuildFile; fileRef = F4BB43A416BD387100443067 /* SHSecondaryBox.m */; };
+		F4BB43B116BD3A9B00443067 /* SHLightGrayBackgroundView.h in Headers */ = {isa = PBXBuildFile; fileRef = F4BB43AF16BD3A9B00443067 /* SHLightGrayBackgroundView.h */; };
+		F4BB43B216BD3A9B00443067 /* SHLightGrayBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4BB43B016BD3A9B00443067 /* SHLightGrayBackgroundView.m */; };
+		F4BC1E3816B4936200A580F9 /* NSArray+Shuffle.h in Headers */ = {isa = PBXBuildFile; fileRef = F4BC1E3616B4936200A580F9 /* NSArray+Shuffle.h */; };
+		F4BC1E3916B4936200A580F9 /* NSArray+Shuffle.m in Sources */ = {isa = PBXBuildFile; fileRef = F4BC1E3716B4936200A580F9 /* NSArray+Shuffle.m */; };
+		F4D817FC16B0A0390079D812 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4D817FB16B0A0390079D812 /* QuartzCore.framework */; };
+		F4DD2AA016FDBF30002A555F /* SHConfigurationWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4DD2A9D16FDBF30002A555F /* SHConfigurationWindowController.xib */; };
+		F4DD2AA316FDBF48002A555F /* SHConfigurationWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4DD2A9D16FDBF30002A555F /* SHConfigurationWindowController.xib */; };
+		F4DD2AA516FDBF73002A555F /* SHAboutBoxWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4DD2AA416FDBF73002A555F /* SHAboutBoxWindowController.xib */; };
+		F4EF51BC16FA281500D1A5C6 /* SHAboutBoxWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = F4EF51B916FA281500D1A5C6 /* SHAboutBoxWindowController.h */; };
+		F4EF51BD16FA281500D1A5C6 /* SHAboutBoxWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4EF51BA16FA281500D1A5C6 /* SHAboutBoxWindowController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F4015D16169CB3C000560296 /* SHConfigurationWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHConfigurationWindowController.h; sourceTree = "<group>"; };
+		F4015D17169CB3C000560296 /* SHConfigurationWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHConfigurationWindowController.m; sourceTree = "<group>"; };
+		F4015D1D169CB47D00560296 /* SHUserDefaults+Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SHUserDefaults+Constants.h"; sourceTree = "<group>"; };
+		F4015D1E169CB47D00560296 /* SHUserDefaults+Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SHUserDefaults+Constants.m"; sourceTree = "<group>"; };
+		F40427CB169B76CB00B146F7 /* SaveHollywood.saver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SaveHollywood.saver; sourceTree = BUILT_PRODUCTS_DIR; };
+		F40427CE169B76CB00B146F7 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		F40427D0169B76CB00B146F7 /* ScreenSaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScreenSaver.framework; path = System/Library/Frameworks/ScreenSaver.framework; sourceTree = SDKROOT; };
+		F40427D3169B76CB00B146F7 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		F40427D5169B76CB00B146F7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		F40427D8169B76CB00B146F7 /* SaveHollywood-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SaveHollywood-Info.plist"; sourceTree = "<group>"; };
+		F40427DC169B76CB00B146F7 /* SaveHollywood-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SaveHollywood-Prefix.pch"; sourceTree = "<group>"; };
+		F40427DD169B76CB00B146F7 /* SaveHollywoodView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SaveHollywoodView.h; sourceTree = "<group>"; };
+		F40427DE169B76CB00B146F7 /* SaveHollywoodView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SaveHollywoodView.m; sourceTree = "<group>"; };
+		F40427E5169B76E600B146F7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		F40427E7169B76F600B146F7 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		F405C92E16DC01D700EFDF39 /* SHTokenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHTokenView.h; sourceTree = "<group>"; };
+		F405C92F16DC01D700EFDF39 /* SHTokenView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHTokenView.m; sourceTree = "<group>"; };
+		F4066EA5170760EA00EBE7D0 /* thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumbnail.png; sourceTree = "<group>"; };
+		F4066EA6170760EA00EBE7D0 /* thumbnail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumbnail@2x.png"; sourceTree = "<group>"; };
+		F40B998916AB1F6200644F61 /* NSColor+String.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+String.h"; sourceTree = "<group>"; };
+		F40B998A16AB1F6200644F61 /* NSColor+String.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+String.m"; sourceTree = "<group>"; };
+		F4121CCC16FD06200059A794 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localized.strings; sourceTree = "<group>"; };
+		F434961A16B701B500C549DF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localized.strings; sourceTree = "<group>"; };
+		F4AB34BC16BED1CF00015DB9 /* SHAssetTableCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHAssetTableCellView.h; sourceTree = "<group>"; };
+		F4AB34BD16BED1CF00015DB9 /* SHAssetTableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHAssetTableCellView.m; sourceTree = "<group>"; };
+		F4B3933116ED43C40061B52E /* SHSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHSlider.h; sourceTree = "<group>"; };
+		F4B3933216ED43C40061B52E /* SHSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHSlider.m; sourceTree = "<group>"; };
+		F4B9BCEC16D54A8B00051854 /* NSIndexSet+Analysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexSet+Analysis.h"; sourceTree = "<group>"; };
+		F4B9BCED16D54A8B00051854 /* NSIndexSet+Analysis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexSet+Analysis.m"; sourceTree = "<group>"; };
+		F4BB43A316BD387100443067 /* SHSecondaryBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHSecondaryBox.h; sourceTree = "<group>"; };
+		F4BB43A416BD387100443067 /* SHSecondaryBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHSecondaryBox.m; sourceTree = "<group>"; };
+		F4BB43AF16BD3A9B00443067 /* SHLightGrayBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHLightGrayBackgroundView.h; sourceTree = "<group>"; };
+		F4BB43B016BD3A9B00443067 /* SHLightGrayBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHLightGrayBackgroundView.m; sourceTree = "<group>"; };
+		F4BC1E3616B4936200A580F9 /* NSArray+Shuffle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Shuffle.h"; sourceTree = "<group>"; };
+		F4BC1E3716B4936200A580F9 /* NSArray+Shuffle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Shuffle.m"; sourceTree = "<group>"; };
+		F4D817FB16B0A0390079D812 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		F4DD2A9E16FDBF30002A555F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SHConfigurationWindowController.xib; sourceTree = "<group>"; };
+		F4DD2AA216FDBF48002A555F /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/SHConfigurationWindowController.xib; sourceTree = "<group>"; };
+		F4DD2AA416FDBF73002A555F /* SHAboutBoxWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SHAboutBoxWindowController.xib; sourceTree = "<group>"; };
+		F4EF51B916FA281500D1A5C6 /* SHAboutBoxWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHAboutBoxWindowController.h; sourceTree = "<group>"; };
+		F4EF51BA16FA281500D1A5C6 /* SHAboutBoxWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHAboutBoxWindowController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F40427C6169B76CB00B146F7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F40427CF169B76CB00B146F7 /* Cocoa.framework in Frameworks */,
+				F40427D1169B76CB00B146F7 /* ScreenSaver.framework in Frameworks */,
+				F40427E6169B76E600B146F7 /* AVFoundation.framework in Frameworks */,
+				F40427E8169B76F600B146F7 /* CoreMedia.framework in Frameworks */,
+				F4D817FC16B0A0390079D812 /* QuartzCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F40427BE169B76CB00B146F7 = {
+			isa = PBXGroup;
+			children = (
+				F40427D6169B76CB00B146F7 /* SaveHollywood */,
+				F40427CD169B76CB00B146F7 /* Frameworks */,
+				F40427CC169B76CB00B146F7 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F40427CC169B76CB00B146F7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F40427CB169B76CB00B146F7 /* SaveHollywood.saver */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F40427CD169B76CB00B146F7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F40427CE169B76CB00B146F7 /* Cocoa.framework */,
+				F40427D0169B76CB00B146F7 /* ScreenSaver.framework */,
+				F40427D2169B76CB00B146F7 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F40427D2169B76CB00B146F7 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F4D817FB16B0A0390079D812 /* QuartzCore.framework */,
+				F40427E7169B76F600B146F7 /* CoreMedia.framework */,
+				F40427E5169B76E600B146F7 /* AVFoundation.framework */,
+				F40427D3169B76CB00B146F7 /* AppKit.framework */,
+				F40427D5169B76CB00B146F7 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		F40427D6169B76CB00B146F7 /* SaveHollywood */ = {
+			isa = PBXGroup;
+			children = (
+				F40B998916AB1F6200644F61 /* NSColor+String.h */,
+				F40B998A16AB1F6200644F61 /* NSColor+String.m */,
+				F4B9BCEC16D54A8B00051854 /* NSIndexSet+Analysis.h */,
+				F4B9BCED16D54A8B00051854 /* NSIndexSet+Analysis.m */,
+				F4BC1E3616B4936200A580F9 /* NSArray+Shuffle.h */,
+				F4BC1E3716B4936200A580F9 /* NSArray+Shuffle.m */,
+				F4015D1D169CB47D00560296 /* SHUserDefaults+Constants.h */,
+				F4015D1E169CB47D00560296 /* SHUserDefaults+Constants.m */,
+				F40427DD169B76CB00B146F7 /* SaveHollywoodView.h */,
+				F40427DE169B76CB00B146F7 /* SaveHollywoodView.m */,
+				F40BA60F16BEC6C000154844 /* Configuration */,
+				F40427D7169B76CB00B146F7 /* Supporting Files */,
+			);
+			path = SaveHollywood;
+			sourceTree = "<group>";
+		};
+		F40427D7169B76CB00B146F7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F40427D8169B76CB00B146F7 /* SaveHollywood-Info.plist */,
+				F4066EA5170760EA00EBE7D0 /* thumbnail.png */,
+				F4066EA6170760EA00EBE7D0 /* thumbnail@2x.png */,
+				F434961916B701B500C549DF /* Localized.strings */,
+				F40427DC169B76CB00B146F7 /* SaveHollywood-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F40BA60F16BEC6C000154844 /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				F40BA61116BEC6D700154844 /* Custom Views */,
+				F4015D16169CB3C000560296 /* SHConfigurationWindowController.h */,
+				F4015D17169CB3C000560296 /* SHConfigurationWindowController.m */,
+				F4DD2A9D16FDBF30002A555F /* SHConfigurationWindowController.xib */,
+				F4EF51B916FA281500D1A5C6 /* SHAboutBoxWindowController.h */,
+				F4EF51BA16FA281500D1A5C6 /* SHAboutBoxWindowController.m */,
+				F4DD2AA416FDBF73002A555F /* SHAboutBoxWindowController.xib */,
+			);
+			name = Configuration;
+			sourceTree = "<group>";
+		};
+		F40BA61116BEC6D700154844 /* Custom Views */ = {
+			isa = PBXGroup;
+			children = (
+				F4BB43A316BD387100443067 /* SHSecondaryBox.h */,
+				F4BB43A416BD387100443067 /* SHSecondaryBox.m */,
+				F4BB43AF16BD3A9B00443067 /* SHLightGrayBackgroundView.h */,
+				F4BB43B016BD3A9B00443067 /* SHLightGrayBackgroundView.m */,
+				F4AB34BC16BED1CF00015DB9 /* SHAssetTableCellView.h */,
+				F4AB34BD16BED1CF00015DB9 /* SHAssetTableCellView.m */,
+				F405C92E16DC01D700EFDF39 /* SHTokenView.h */,
+				F405C92F16DC01D700EFDF39 /* SHTokenView.m */,
+				F4B3933116ED43C40061B52E /* SHSlider.h */,
+				F4B3933216ED43C40061B52E /* SHSlider.m */,
+			);
+			name = "Custom Views";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		F40427C7169B76CB00B146F7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F4015D19169CB3C000560296 /* SHConfigurationWindowController.h in Headers */,
+				F4015D1F169CB47D00560296 /* SHUserDefaults+Constants.h in Headers */,
+				F40B998B16AB1F6200644F61 /* NSColor+String.h in Headers */,
+				F4BC1E3816B4936200A580F9 /* NSArray+Shuffle.h in Headers */,
+				F4BB43A516BD387100443067 /* SHSecondaryBox.h in Headers */,
+				F4BB43B116BD3A9B00443067 /* SHLightGrayBackgroundView.h in Headers */,
+				F4AB34BE16BED1CF00015DB9 /* SHAssetTableCellView.h in Headers */,
+				F4B9BCEE16D54A8B00051854 /* NSIndexSet+Analysis.h in Headers */,
+				F405C93016DC01D700EFDF39 /* SHTokenView.h in Headers */,
+				F4B3933316ED43C40061B52E /* SHSlider.h in Headers */,
+				F4EF51BC16FA281500D1A5C6 /* SHAboutBoxWindowController.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		F40427CA169B76CB00B146F7 /* SaveHollywood */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F40427E2169B76CB00B146F7 /* Build configuration list for PBXNativeTarget "SaveHollywood" */;
+			buildPhases = (
+				F40427C5169B76CB00B146F7 /* Sources */,
+				F40427C6169B76CB00B146F7 /* Frameworks */,
+				F40427C7169B76CB00B146F7 /* Headers */,
+				F40427C8169B76CB00B146F7 /* Resources */,
+				F40427C9169B76CB00B146F7 /* Rez */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SaveHollywood;
+			productName = SaveHollywood;
+			productReference = F40427CB169B76CB00B146F7 /* SaveHollywood.saver */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F40427C0169B76CB00B146F7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = SH;
+				LastUpgradeCheck = 0440;
+				ORGANIZATIONNAME = WhiteBox;
+			};
+			buildConfigurationList = F40427C3169B76CB00B146F7 /* Build configuration list for PBXProject "SaveHollywood" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				fr,
+			);
+			mainGroup = F40427BE169B76CB00B146F7;
+			productRefGroup = F40427CC169B76CB00B146F7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F40427CA169B76CB00B146F7 /* SaveHollywood */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F40427C8169B76CB00B146F7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F434961B16B701B500C549DF /* Localized.strings in Resources */,
+				F4DD2AA016FDBF30002A555F /* SHConfigurationWindowController.xib in Resources */,
+				F4DD2AA316FDBF48002A555F /* SHConfigurationWindowController.xib in Resources */,
+				F4DD2AA516FDBF73002A555F /* SHAboutBoxWindowController.xib in Resources */,
+				F4066EA7170760EA00EBE7D0 /* thumbnail.png in Resources */,
+				F4066EA8170760EA00EBE7D0 /* thumbnail@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXRezBuildPhase section */
+		F40427C9169B76CB00B146F7 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F40427C5169B76CB00B146F7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F40427DF169B76CB00B146F7 /* SaveHollywoodView.m in Sources */,
+				F4015D20169CB47D00560296 /* SHUserDefaults+Constants.m in Sources */,
+				F4015D1A169CB3C000560296 /* SHConfigurationWindowController.m in Sources */,
+				F40B998C16AB1F6200644F61 /* NSColor+String.m in Sources */,
+				F4BC1E3916B4936200A580F9 /* NSArray+Shuffle.m in Sources */,
+				F4BB43A616BD387100443067 /* SHSecondaryBox.m in Sources */,
+				F4BB43B216BD3A9B00443067 /* SHLightGrayBackgroundView.m in Sources */,
+				F4AB34BF16BED1CF00015DB9 /* SHAssetTableCellView.m in Sources */,
+				F4B9BCEF16D54A8B00051854 /* NSIndexSet+Analysis.m in Sources */,
+				F405C93116DC01D700EFDF39 /* SHTokenView.m in Sources */,
+				F4B3933416ED43C40061B52E /* SHSlider.m in Sources */,
+				F4EF51BD16FA281500D1A5C6 /* SHAboutBoxWindowController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		F434961916B701B500C549DF /* Localized.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F434961A16B701B500C549DF /* en */,
+				F4121CCC16FD06200059A794 /* fr */,
+			);
+			name = Localized.strings;
+			sourceTree = "<group>";
+		};
+		F4DD2A9D16FDBF30002A555F /* SHConfigurationWindowController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F4DD2A9E16FDBF30002A555F /* en */,
+				F4DD2AA216FDBF48002A555F /* fr */,
+			);
+			name = SHConfigurationWindowController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F40427E0169B76CB00B146F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx10.8;
+			};
+			name = Debug;
+		};
+		F40427E1169B76CB00B146F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				SDKROOT = macosx10.8;
+			};
+			name = Release;
+		};
+		F40427E3169B76CB00B146F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SaveHollywood/SaveHollywood-Prefix.pch";
+				GCC_VERSION = "";
+				INFOPLIST_FILE = "SaveHollywood/SaveHollywood-Info.plist";
+				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = saver;
+			};
+			name = Debug;
+		};
+		F40427E4169B76CB00B146F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SaveHollywood/SaveHollywood-Prefix.pch";
+				GCC_VERSION = "";
+				INFOPLIST_FILE = "SaveHollywood/SaveHollywood-Info.plist";
+				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = saver;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F40427C3169B76CB00B146F7 /* Build configuration list for PBXProject "SaveHollywood" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F40427E0169B76CB00B146F7 /* Debug */,
+				F40427E1169B76CB00B146F7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F40427E2169B76CB00B146F7 /* Build configuration list for PBXNativeTarget "SaveHollywood" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F40427E3169B76CB00B146F7 /* Debug */,
+				F40427E4169B76CB00B146F7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F40427C0169B76CB00B146F7 /* Project object */;
+}
