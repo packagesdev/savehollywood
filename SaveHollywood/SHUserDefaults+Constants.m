@@ -14,7 +14,7 @@
 #import "SHUserDefaults+Constants.h"
 
 NSString * const SHUserDefaultsAssetsRandomOrder=@"assets.randomOrder";
-NSString * const SHUserDefaultsAssetsRememberPosition=@"assets.rememberPosition";
+NSString * const SHUserDefaultsAssetsStartWhereLeftOff=@"assets.startWhereLeftOff";
 NSString * const SHUserDefaultsAssetsLibrary=@"assets.library";
 
 NSString * const SHUserDefaultsFrameScaling=@"frame.scaling";

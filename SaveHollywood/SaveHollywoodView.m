@@ -508,7 +508,7 @@ NSUInteger random_no(NSUInteger n)
                             {
                                 NSString * tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKey,(unsigned long)tScreenIndex];
                                 
-                                if ([tDefaults boolForKey:SHUserDefaultsAssetsRememberPosition]==YES)
+                                if ([tDefaults boolForKey:SHUserDefaultsAssetsStartWhereLeftOff]==YES)
                                 {
                                     NSData * tData=[tDefaults objectForKey:tScreenKey];
                                     
@@ -608,20 +608,25 @@ NSUInteger random_no(NSUInteger n)
         {
             NSString * tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKey,(unsigned long)tScreenIndex];
             
-            if ([tDefaults boolForKey:SHUserDefaultsAssetsRememberPosition]==YES)
+            if ([tDefaults boolForKey:SHUserDefaultsAssetsStartWhereLeftOff]==YES)
             {
-                CMTime tCurrentTime=[_AVPlayerLayer.player currentTime];
-                NSURL * tCurrentURL=[((AVURLAsset *) _AVPlayerLayer.player.currentItem.asset) URL];
-                NSValue * tValue=[NSValue valueWithCMTime:tCurrentTime];
-            
-                NSDictionary * tLastAssetDictionary=[NSDictionary dictionaryWithObjectsAndKeys:tValue,SHAssetTimeKey,
-                                                                                               tCurrentURL,SHAssetURLKey,
-                                                                                               nil];
-            
-                NSData * tData=[NSArchiver archivedDataWithRootObject:tLastAssetDictionary];
                 
-                if (tData!=nil)
-                    [tDefaults setObject:tData forKey:tScreenKey];
+                NSURL * tCurrentURL=[((AVURLAsset *) _AVPlayerLayer.player.currentItem.asset) URL];
+                
+                if (tCurrentURL!=nil)
+                {
+                    CMTime tCurrentTime=[_AVPlayerLayer.player currentTime];
+                    NSValue * tValue=[NSValue valueWithCMTime:tCurrentTime];
+            
+                    NSDictionary * tLastAssetDictionary=[NSDictionary dictionaryWithObjectsAndKeys:tValue,SHAssetTimeKey,
+                                                                                                   tCurrentURL,SHAssetURLKey,
+                                                                                                   nil];
+                
+                    NSData * tData=[NSArchiver archivedDataWithRootObject:tLastAssetDictionary];
+                    
+                    if (tData!=nil)
+                        [tDefaults setObject:tData forKey:tScreenKey];
+                }
             }
             else
             {

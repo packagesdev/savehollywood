@@ -14,7 +14,7 @@
 #import <Foundation/Foundation.h>
 
 extern NSString * const SHUserDefaultsAssetsRandomOrder;
-extern NSString * const SHUserDefaultsAssetsRememberPosition;
+extern NSString * const SHUserDefaultsAssetsStartWhereLeftOff;
 extern NSString * const SHUserDefaultsAssetsLibrary;
 
 
