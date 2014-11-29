@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2012-2013, Stephane Sudre
+ Copyright (c) 2012-2014, Stephane Sudre
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -45,6 +45,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
     // UI
     
     IBOutlet NSButton * _randomOrderCheckBox;
+    IBOutlet NSButton * _resumePlayingCheckBox;
     
     IBOutlet NSTableView *_assetsTableView;
     
@@ -222,6 +223,12 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
     tBool=[tDefaults boolForKey:SHUserDefaultsAssetsRandomOrder];
     
     [_randomOrderCheckBox setState:(tBool==YES) ? NSOnState : NSOffState];
+    
+        // Start where left off
+    
+    tBool=[tDefaults boolForKey:SHUserDefaultsAssetsStartWhereLeftOff];
+    
+    [_resumePlayingCheckBox setState:(tBool==YES) ? NSOnState : NSOffState];
     
         // List
     
@@ -761,6 +768,10 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
             // Random Order
         
         [tDefaults setBool:([_randomOrderCheckBox state]==NSOnState) forKey:SHUserDefaultsAssetsRandomOrder];
+        
+            // Start where left off
+        
+        [tDefaults setBool:([_resumePlayingCheckBox state]==NSOnState) forKey:SHUserDefaultsAssetsStartWhereLeftOff];
 
             // List
         

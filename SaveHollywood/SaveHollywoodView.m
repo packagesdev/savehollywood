@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2012-2013, Stephane Sudre
+ Copyright (c) 2012-2014, Stephane Sudre
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -25,6 +25,10 @@
 #define MAXRAND                    (2147483648.0) /* unsigned 1<<31 as a float */
 
 #define METADATA_DISPLAY_DURATION 5.0
+
+NSString * const SHScreenKey=@"screen#";
+NSString * const SHAssetTimeKey=@"asset.time";
+NSString * const SHAssetURLKey=@"asset.url";
 
 NSString * const SHShouldSwitchMutedStateNotification=@"SHShouldSwitchMutedStateNotification";
 NSString * const SHShouldIncreaseVolumeNotification=@"SHShouldIncreaseVolumeNotification";
@@ -84,7 +88,9 @@ NSUInteger random_no(NSUInteger n)
     SHConfigurationWindowController *_configurationWindowController;
 }
 
-- (BOOL)playNextAsset;
+- (NSUInteger)screenIndex;
+
+- (BOOL)playNextAsset:(NSDictionary *)preferredNextAssetDictionary;
 
 - (void)switchMutedState:(NSNotification *)inNotification;
 - (void)increaseVolume:(NSNotificationCenter *)inNotification;
@@ -92,6 +98,7 @@ NSUInteger random_no(NSUInteger n)
 
 - (void)showMetadata:(NSTimer *)inTimer;
 - (void)hideMetadata:(id)object;
+
 
 
 @end
@@ -228,6 +235,29 @@ NSUInteger random_no(NSUInteger n)
     }
     
     [super keyDown:inEvent];
+}
+
+#pragma mark -
+
+- (NSUInteger)screenIndex
+{
+    NSWindow * tWindow=self.window;
+    NSRect tWindowFrame=[tWindow frame];
+    NSArray * tScreensArray=[NSScreen screens];
+    __block NSUInteger tFoundIndex=NSNotFound;
+    
+    [tScreensArray enumerateObjectsUsingBlock:^(NSScreen * bScreen, NSUInteger bIndex, BOOL *bOutStop) {
+    
+        NSRect tScreenFrame=[bScreen frame];
+        
+        if (NSContainsRect(tScreenFrame,tWindowFrame)==YES)
+        {
+            tFoundIndex=bIndex;
+            *bOutStop=YES;
+        }
+    }];
+    
+    return tFoundIndex;
 }
 
 #pragma mark -
@@ -466,9 +496,40 @@ NSUInteger random_no(NSUInteger n)
                                                                      name:AVPlayerItemDidPlayToEndTimeNotification
                                                                    object:nil];
                         
+                        //
+                        
+                        NSDictionary * tLastKnownAssetDictionary=nil;
+                        
+                        if (_preview==NO)
+                        {
+                            NSUInteger tScreenIndex=[self screenIndex];
+                        
+                            if (tScreenIndex!=NSNotFound)
+                            {
+                                NSString * tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKey,(unsigned long)tScreenIndex];
+                                
+                                if ([tDefaults boolForKey:SHUserDefaultsAssetsStartWhereLeftOff]==YES)
+                                {
+                                    NSData * tData=[tDefaults objectForKey:tScreenKey];
+                                    
+                                    if (tData!=nil)
+                                    {
+                                        tLastKnownAssetDictionary=[NSUnarchiver unarchiveObjectWithData:tData];
+                                        
+                                        if (tLastKnownAssetDictionary==nil)
+                                            NSLog(@"Error when unarchiving last known asset for %@",tScreenKey);
+                                    }
+                                }
+                                else
+                                {
+                                    [tDefaults removeObjectForKey:tScreenKey];
+                                }
+                            }
+                        }
+                        
                         // Play the next asset
                         
-                        if ([self playNextAsset]==YES)
+                        if ([self playNextAsset:tLastKnownAssetDictionary]==YES)
                         {
                             return;
                         }
@@ -518,6 +579,13 @@ NSUInteger random_no(NSUInteger n)
 
 - (void)stopAnimation
 {
+#ifdef __TEST_SCREENSAVER__
+    NSUserDefaults *tDefaults = [NSUserDefaults standardUserDefaults];
+#else
+    NSString *tIdentifier = [[NSBundle bundleForClass:[self class]] bundleIdentifier];
+    ScreenSaverDefaults *tDefaults = [ScreenSaverDefaults defaultsForModuleWithName:tIdentifier];
+#endif
+    
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideMetadata:) object:nil];
     
     // Remove observers
@@ -529,6 +597,43 @@ NSUInteger random_no(NSUInteger n)
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SHShouldSwitchMutedStateNotification object:nil];
     
     // Stop Movie
+
+    if (_preview==NO)
+    {
+        // Save current asset and time if necessary
+    
+        NSUInteger tScreenIndex=[self screenIndex];
+        
+        if (tScreenIndex!=NSNotFound)
+        {
+            NSString * tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKey,(unsigned long)tScreenIndex];
+            
+            if ([tDefaults boolForKey:SHUserDefaultsAssetsStartWhereLeftOff]==YES)
+            {
+                
+                NSURL * tCurrentURL=[((AVURLAsset *) _AVPlayerLayer.player.currentItem.asset) URL];
+                
+                if (tCurrentURL!=nil)
+                {
+                    CMTime tCurrentTime=[_AVPlayerLayer.player currentTime];
+                    NSValue * tValue=[NSValue valueWithCMTime:tCurrentTime];
+            
+                    NSDictionary * tLastAssetDictionary=[NSDictionary dictionaryWithObjectsAndKeys:tValue,SHAssetTimeKey,
+                                                                                                   tCurrentURL,SHAssetURLKey,
+                                                                                                   nil];
+                
+                    NSData * tData=[NSArchiver archivedDataWithRootObject:tLastAssetDictionary];
+                    
+                    if (tData!=nil)
+                        [tDefaults setObject:tData forKey:tScreenKey];
+                }
+            }
+            else
+            {
+                [tDefaults removeObjectForKey:tScreenKey];
+            }
+        }
+    }
     
     [_currentAssetMetadataTitle release];
     _currentAssetMetadataTitle=nil;
@@ -566,11 +671,12 @@ NSUInteger random_no(NSUInteger n)
 #endif
 }
 
-- (BOOL) playNextAsset
+- (BOOL) playNextAsset:(NSDictionary *)preferredNextAssetDictionary
 {
     NSUInteger tCount=[__assetsArray count];
-    AVAsset * tAsset=nil;
+    AVURLAsset * tAsset=nil;
     NSUInteger tNextIndex=__arrayIndex;
+    NSURL * tPreferredNextURL=[preferredNextAssetDictionary objectForKey:SHAssetURLKey];
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideMetadata:) object:nil];
     
@@ -598,7 +704,7 @@ NSUInteger random_no(NSUInteger n)
             
             if ([_fileManager fileExistsAtPath:tAbsolutePath]==YES)
             {
-                tAsset=[AVAsset assetWithURL:tURL];
+                tAsset=[AVURLAsset assetWithURL:tURL];
                 
                 if ([tAsset isPlayable]==NO)
                 {
@@ -610,13 +716,32 @@ NSUInteger random_no(NSUInteger n)
                 }
                 else
                 {
-                    break;
+                    if (tPreferredNextURL==nil || [tPreferredNextURL isEqualTo:tURL]==YES)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        __arrayIndex++;
+                    }
                 }
+            }
+            else
+            {
+                [__assetsArray removeObjectAtIndex:__arrayIndex];
+                
+                tCount=[__assetsArray count];
+                
+                tAsset=nil;
             }
         }
         else
         {
             // Remote URL
+            
+                // Skip remote URL for the time being
+            
+            __arrayIndex++;
             
             // A COMPLETER
         }
@@ -624,13 +749,13 @@ NSUInteger random_no(NSUInteger n)
     
     if (tAsset==nil)
     {
-        if (tNextIndex>0 && tCount>0)
+        if ((tNextIndex>0 || tPreferredNextURL!=nil) && tCount>0)
         {
-            // We at least played once asset previously
+            // We at least played once asset previously (or we were looking for the last known asset)
             
             __arrayIndex=0;
             
-            return [self playNextAsset];
+            return [self playNextAsset:nil];
         }
         
         return NO;
@@ -642,7 +767,7 @@ NSUInteger random_no(NSUInteger n)
     {
         __arrayIndex++;
         
-        [self playNextAsset];
+        [self playNextAsset:nil];
     }
     else
     {
@@ -776,6 +901,15 @@ NSUInteger random_no(NSUInteger n)
                 }
                 
                 break;
+        }
+        
+        NSValue * tValue=[preferredNextAssetDictionary objectForKey:SHAssetTimeKey];
+        
+        if (tValue!=nil)
+        {
+            CMTime tSeekTime=[tValue CMTimeValue];
+            
+            [_AVPlayerLayer.player seekToTime:tSeekTime toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
         }
         
         [_AVPlayerLayer.player play];
@@ -994,7 +1128,7 @@ NSUInteger random_no(NSUInteger n)
         
         __arrayIndex++;
         
-        if ([self playNextAsset]==NO)
+        if ([self playNextAsset:nil]==NO)
         {
             // A COMPLETER
         }
