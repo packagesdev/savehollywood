@@ -600,7 +600,7 @@ NSUInteger random_no(NSUInteger n)
 
     if (_preview==NO)
     {
-		// Save current asset and time if necessary
+        // Save current asset and time if necessary
     
         NSUInteger tScreenIndex=[self screenIndex];
         
@@ -608,8 +608,9 @@ NSUInteger random_no(NSUInteger n)
         {
             NSString * tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKey,(unsigned long)tScreenIndex];
             
-			if ([tDefaults boolForKey:SHUserDefaultsAssetsStartWhereLeftOff]==YES)
+            if ([tDefaults boolForKey:SHUserDefaultsAssetsStartWhereLeftOff]==YES)
             {
+                
                 NSURL * tCurrentURL=[((AVURLAsset *) _AVPlayerLayer.player.currentItem.asset) URL];
                 
                 if (tCurrentURL!=nil)
@@ -631,8 +632,6 @@ NSUInteger random_no(NSUInteger n)
             {
                 [tDefaults removeObjectForKey:tScreenKey];
             }
-			
-			[tDefaults synchronize];	// Workaround for the bug introduced in Yosemite by Apple.
         }
     }
     
