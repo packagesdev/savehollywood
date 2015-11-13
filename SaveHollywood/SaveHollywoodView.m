@@ -632,6 +632,8 @@ NSUInteger random_no(NSUInteger n)
             {
                 [tDefaults removeObjectForKey:tScreenKey];
             }
+			
+			[tDefaults synchronize];	// Workaround for bug introduced by Apple in Yosemite
         }
     }
     
