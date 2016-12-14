@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2012-2014, Stephane Sudre
+ Copyright (c) 2012-2016, Stephane Sudre
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -115,9 +115,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
 
 + (NSImage *)createIconForFileType:(NSString *)inFileType
 {
-    NSImage * tImage;
-    
-	tImage=[[NSWorkspace sharedWorkspace] iconForFileType:inFileType];
+    NSImage * tImage=[[NSWorkspace sharedWorkspace] iconForFileType:inFileType];
     
 	[tImage setSize:NSMakeSize(16.,16.)];
     
@@ -126,9 +124,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
 
 + (NSImage *)createIconForFile:(NSString *)inPath
 {
-    NSImage * tImage;
-    
-	tImage=[[NSWorkspace sharedWorkspace] iconForFile:inPath];
+    NSImage * tImage=[[NSWorkspace sharedWorkspace] iconForFile:inPath];
     
 	[tImage setSize:NSMakeSize(16.,16.)];
     
@@ -146,21 +142,17 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
 
 - (void)windowDidLoad
 {
-    NSImage * tImage;
-    NSBundle * tVolumeMenuBundle;
-    NSURL * tURL;
-    
     [super windowDidLoad];
     
     // Set the speaker icons
     
-    tVolumeMenuBundle=[NSBundle bundleWithPath:@"/System/Library/CoreServices/Menu Extras/Volume.menu"];
+    NSBundle * tVolumeMenuBundle=[NSBundle bundleWithPath:@"/System/Library/CoreServices/Menu Extras/Volume.menu"];
     
-    tURL=[tVolumeMenuBundle URLForResource:@"Volume1" withExtension:@"pdf"];
+    NSURL * tURL=[tVolumeMenuBundle URLForResource:@"Volume1" withExtension:@"pdf"];
     
     if (tURL!=nil)
     {
-        tImage=[[NSImage alloc] initWithContentsOfURL:tURL];
+        NSImage * tImage=[[NSImage alloc] initWithContentsOfURL:tURL];
     
         if (tImage!=nil)
         {
@@ -173,7 +165,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
     
     if (tURL!=nil)
     {
-        tImage=[[NSImage alloc] initWithContentsOfURL:tURL];
+        NSImage * tImage=[[NSImage alloc] initWithContentsOfURL:tURL];
         
         if (tImage!=nil)
         {
@@ -184,7 +176,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
     
     // Register for D&D
     
-    [_assetsTableView registerForDraggedTypes:[NSArray arrayWithObjects:SHPasteboardTypeSelectedRows,NSFilenamesPboardType,nil]];
+    [_assetsTableView registerForDraggedTypes:@[SHPasteboardTypeSelectedRows,NSFilenamesPboardType]];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(shouldShowValueLabel:)
@@ -207,20 +199,16 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
     NSString *tIdentifier = [[NSBundle bundleForClass:[self class]] bundleIdentifier];
     ScreenSaverDefaults *tDefaults = [ScreenSaverDefaults defaultsForModuleWithName:tIdentifier];
 #endif
-    BOOL tBool;
-    NSInteger tInteger;
+
     float tFloat;
-    id tObject;
-    NSString *tString;
     NSColor *tColor=nil;
     NSFileManager * tFileManager=[NSFileManager defaultManager];
-    NSArray * tAssetsArray;
     
     // Assets
     
         // Random Order
     
-    tBool=[tDefaults boolForKey:SHUserDefaultsAssetsRandomOrder];
+    BOOL tBool=[tDefaults boolForKey:SHUserDefaultsAssetsRandomOrder];
     
     [_randomOrderCheckBox setState:(tBool==YES) ? NSOnState : NSOffState];
     
@@ -234,7 +222,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
     
     _cachedAssetsArray=[[NSMutableArray alloc] initWithCapacity:3];
     
-    tAssetsArray=[tDefaults objectForKey:SHUserDefaultsAssetsLibrary];
+    NSArray * tAssetsArray=[tDefaults objectForKey:SHUserDefaultsAssetsLibrary];
     
     for(NSString * tPath in tAssetsArray)
     {
@@ -243,11 +231,11 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
         
         if ([tFileManager fileExistsAtPath:tPath isDirectory:&isDirectory]==YES)
         {
-            [tMutableDictionary setObject:[NSNumber numberWithBool:isDirectory] forKey:SHConfigurationAssetFolder];
+            tMutableDictionary[SHConfigurationAssetFolder]=@(isDirectory);
         }
         else
         {
-            [tMutableDictionary setObject:[NSNumber numberWithBool:YES] forKey:SHConfigurationAssetNotFound];
+            tMutableDictionary[SHConfigurationAssetNotFound]=@(YES);
         }
         
         [_cachedAssetsArray addObject:tMutableDictionary];
@@ -257,7 +245,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
     
         // Scaling
     
-    tInteger=[tDefaults integerForKey:SHUserDefaultsFrameScaling];
+    NSInteger tInteger=[tDefaults integerForKey:SHUserDefaultsFrameScaling];
     
     [_frameScalingMatrix selectCellWithTag:tInteger];
     
@@ -302,7 +290,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
     
         // Background Color
     
-    tString=[tDefaults stringForKey:SHUserDefaultsBackgroundColor];
+    NSString *tString=[tDefaults stringForKey:SHUserDefaultsBackgroundColor];
     
     if (tString!=nil)
         tColor=[NSColor colorFromString:tString];
@@ -337,7 +325,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
         [_volumeFullButton setEnabled:YES];
     }
     
-    tObject=[tDefaults objectForKey:SHUserDefaultsMovieVolumeCustomValue];
+    id tObject=[tDefaults objectForKey:SHUserDefaultsMovieVolumeCustomValue];
     
     if (tObject!=nil)
     {
@@ -356,149 +344,145 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
 
 #pragma mark -
 
-- (void) updateAssetDuration:(id)inObject
+- (void)updateAssetDuration:(id)inObject
 {
     NSDictionary * tDictionary=(NSDictionary *) inObject;
-    NSString * tPath=[tDictionary objectForKey:SHNotificationAssetPath];
+    NSString * tPath=tDictionary[SHNotificationAssetPath];
     
-    if (tPath!=nil)
-    {
-        for(NSMutableDictionary * tAssetDictionary in _cachedAssetsArray)
-        {
-            if ([[tAssetDictionary objectForKey:SHConfigurationAssetPath] isEqualToString:tPath]==YES)
-            {
-                [tAssetDictionary setObject:[tDictionary objectForKey:SHNotificationAssetDurationString] forKey:SHConfigurationAssetDuration];
-            
-                // Save selection
-                
-                NSIndexSet * tSelection=[_assetsTableView selectedRowIndexes];
-                
-                [_assetsTableView reloadData];
-                
-                // Restore selection
-                
-                [_assetsTableView selectRowIndexes:tSelection byExtendingSelection:NO];
-                
-                break;
-            }
-        }
-    }
+    if (tPath==nil)
+		return;
+	
+	for(NSMutableDictionary * tAssetDictionary in _cachedAssetsArray)
+	{
+		if ([tAssetDictionary[SHConfigurationAssetPath] isEqualToString:tPath]==YES)
+		{
+			tAssetDictionary[SHConfigurationAssetDuration]=tDictionary[SHNotificationAssetDurationString];
+		
+			// Save selection
+			
+			NSIndexSet * tSelection=[_assetsTableView selectedRowIndexes];
+			
+			[_assetsTableView reloadData];
+			
+			// Restore selection
+			
+			[_assetsTableView selectRowIndexes:tSelection byExtendingSelection:NO];
+			
+			return;
+		}
+	}
 }
 
 - (void) getAssetDurationThread:(NSString *)inPath
 {
-    if (inPath!=nil)
-    {
-        NSAutoreleasePool * tPool=[NSAutoreleasePool new];
-    
-        NSURL * tURL=[NSURL fileURLWithPath:inPath];
-        
-        if (tURL!=nil)
-        {
-            AVURLAsset *tAVAsset=[AVURLAsset URLAssetWithURL:tURL options:nil];
-            
-            if (tAVAsset!=nil)
-            {
-                CMTime tTime=tAVAsset.duration;
-                Float64 tSeconds=CMTimeGetSeconds(tTime);
-                
-                unsigned int tNumberOfHours=tSeconds/(3600.0);
-                tSeconds=tSeconds-(Float64)tNumberOfHours*3600.0;
-                
-                unsigned int tNumberOfMinutes=tSeconds/60.0;
-                tSeconds=tSeconds-(Float64)tNumberOfMinutes*60.0;
-                
-                unsigned int tNumberOfSeconds=tSeconds;
-                
-                [self performSelectorOnMainThread:@selector(updateAssetDuration:)
-                                       withObject:[NSDictionary dictionaryWithObjectsAndKeys:inPath,SHNotificationAssetPath,
-                                                                                                 [NSString stringWithFormat:@"%02u:%02u:%02u",tNumberOfHours,tNumberOfMinutes,tNumberOfSeconds],SHNotificationAssetDurationString,
-                                                                                                  nil]
-                                        waitUntilDone:NO];
-            }
-        }
-        
-        [tPool drain];
-    }
+    if (inPath==nil)
+		return;
+	
+	NSAutoreleasePool * tPool=[NSAutoreleasePool new];
+
+	NSURL * tURL=[NSURL fileURLWithPath:inPath];
+	
+	if (tURL!=nil)
+	{
+		AVURLAsset *tAVAsset=[AVURLAsset URLAssetWithURL:tURL options:nil];
+		
+		if (tAVAsset!=nil)
+		{
+			CMTime tTime=tAVAsset.duration;
+			Float64 tSeconds=CMTimeGetSeconds(tTime);
+			
+			unsigned int tNumberOfHours=tSeconds/(3600.0);
+			tSeconds=tSeconds-(Float64)tNumberOfHours*3600.0;
+			
+			unsigned int tNumberOfMinutes=tSeconds/60.0;
+			tSeconds=tSeconds-(Float64)tNumberOfMinutes*60.0;
+			
+			unsigned int tNumberOfSeconds=tSeconds;
+			
+			[self performSelectorOnMainThread:@selector(updateAssetDuration:)
+								   withObject:@{SHNotificationAssetPath:inPath,
+												SHNotificationAssetDurationString:[NSString stringWithFormat:@"%02u:%02u:%02u",tNumberOfHours,tNumberOfMinutes,tNumberOfSeconds]}
+									waitUntilDone:NO];
+		}
+	}
+	
+	[tPool drain];
 }
 
-- (void) updateAssetsCount:(id)inObject
+- (void)updateAssetsCount:(id)inObject
 {
     NSDictionary * tDictionary=(NSDictionary *) inObject;
-    NSString * tPath=[tDictionary objectForKey:SHNotificationAssetPath];
+    NSString * tPath=tDictionary[SHNotificationAssetPath];
     
-    if (tPath!=nil)
-    {
-        for(NSMutableDictionary * tAssetDictionary in _cachedAssetsArray)
-        {
-            if ([[tAssetDictionary objectForKey:SHConfigurationAssetPath] isEqualToString:tPath]==YES)
-            {
-                [tAssetDictionary setObject:[tDictionary objectForKey:SHNotificationAssetFolderAssetsCount] forKey:SHConfigurationAssetFolderAssetsCount];
-                
-                // Save selection
-                
-                NSIndexSet * tSelection=[_assetsTableView selectedRowIndexes];
-                
-                [_assetsTableView reloadData];
-                
-                // Restore selection
-                
-                [_assetsTableView selectRowIndexes:tSelection byExtendingSelection:NO];
-                
-                break;
-            }
-        }
-    }
+    if (tPath==nil)
+		return;
+	
+	for(NSMutableDictionary * tAssetDictionary in _cachedAssetsArray)
+	{
+		if ([tAssetDictionary[SHConfigurationAssetPath] isEqualToString:tPath]==YES)
+		{
+			tAssetDictionary[SHConfigurationAssetFolderAssetsCount]=tDictionary[SHNotificationAssetFolderAssetsCount];
+			
+			// Save selection
+			
+			NSIndexSet * tSelection=[_assetsTableView selectedRowIndexes];
+			
+			[_assetsTableView reloadData];
+			
+			// Restore selection
+			
+			[_assetsTableView selectRowIndexes:tSelection byExtendingSelection:NO];
+			
+			return;
+		}
+	}
 }
 
-- (void) getAssetsCountThread:(NSString *)inPath
+- (void)getAssetsCountThread:(NSString *)inPath
 {
-    if (inPath!=nil)
-    {
-        NSAutoreleasePool * tPool=[NSAutoreleasePool new];
-        
-        NSFileManager * tFileManager=[NSFileManager defaultManager];
-        NSUInteger tCount=0;
-        BOOL isDirectory;
-        
-        if ([tFileManager fileExistsAtPath:inPath isDirectory:&isDirectory]==YES && isDirectory==YES)
-        {
-            NSArray * tArray=[tFileManager contentsOfDirectoryAtPath:inPath error:NULL];
-            NSArray * tUTIsArray=[AVURLAsset audiovisualTypes];
-            
-            for(NSString * tFileName in tArray)
-            {
-                NSString * tFilePath=[inPath stringByAppendingPathComponent:tFileName];
-                
-                if ([tFileManager fileExistsAtPath:tFilePath isDirectory:&isDirectory]==YES && isDirectory==NO)
-                {
-                    NSString * tFileUTI;
-                    NSURL * tURL=[NSURL fileURLWithPath:tFilePath];
-                    
-                    if ([tURL getResourceValue:&tFileUTI forKey:NSURLTypeIdentifierKey error:NULL]==YES)
-                    {
-                        if ([tUTIsArray containsObject:tFileUTI]==YES)
-                        {
-                            AVURLAsset *tAVAsset=[AVURLAsset URLAssetWithURL:tURL options:nil];
-                            
-                            if (tAVAsset.isPlayable==YES)
-                            {
-                                tCount++;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        [self performSelectorOnMainThread:@selector(updateAssetsCount:)
-                               withObject:[NSDictionary dictionaryWithObjectsAndKeys:inPath,SHNotificationAssetPath,
-                                                                                     [NSNumber numberWithUnsignedInteger:tCount],SHNotificationAssetFolderAssetsCount,
-                                                                                     nil]
-                            waitUntilDone:NO];
-        
-        [tPool drain];
-    }
+    if (inPath==nil)
+		return;
+
+	NSAutoreleasePool * tPool=[NSAutoreleasePool new];
+	
+	NSFileManager * tFileManager=[NSFileManager defaultManager];
+	NSUInteger tCount=0;
+	BOOL isDirectory;
+	
+	if ([tFileManager fileExistsAtPath:inPath isDirectory:&isDirectory]==YES && isDirectory==YES)
+	{
+		NSArray * tArray=[tFileManager contentsOfDirectoryAtPath:inPath error:NULL];
+		NSArray * tUTIsArray=[AVURLAsset audiovisualTypes];
+		
+		for(NSString * tFileName in tArray)
+		{
+			NSString * tFilePath=[inPath stringByAppendingPathComponent:tFileName];
+			
+			if ([tFileManager fileExistsAtPath:tFilePath isDirectory:&isDirectory]==YES && isDirectory==NO)
+			{
+				NSString * tFileUTI;
+				NSURL * tURL=[NSURL fileURLWithPath:tFilePath];
+				
+				if ([tURL getResourceValue:&tFileUTI forKey:NSURLTypeIdentifierKey error:NULL]==YES)
+				{
+					if ([tUTIsArray containsObject:tFileUTI]==YES)
+					{
+						AVURLAsset *tAVAsset=[AVURLAsset URLAssetWithURL:tURL options:nil];
+						
+						if (tAVAsset.isPlayable==YES)
+							tCount++;
+					}
+				}
+			}
+		}
+	}
+	
+	[self performSelectorOnMainThread:@selector(updateAssetsCount:)
+						   withObject:@{SHNotificationAssetPath:inPath,
+										SHNotificationAssetFolderAssetsCount:@(tCount)}
+						waitUntilDone:NO];
+	
+	[tPool drain];
 }
 
 #pragma mark -
@@ -514,35 +498,29 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
         if (tClickedRow!=-1)
         {
             NSIndexSet * tIndexSet=[_assetsTableView selectedRowIndexes];
-            NSDictionary * tDictionary;
-            NSString * tAssetPath;
-            NSFileManager * tFileManager=[NSFileManager defaultManager];
+			NSFileManager * tFileManager=[NSFileManager defaultManager];
             
             if ([tIndexSet containsIndex:tClickedRow]==NO)
             {
-                tDictionary=[_cachedAssetsArray objectAtIndex:tClickedRow];
+                NSDictionary * tDictionary=_cachedAssetsArray[tClickedRow];
                 
-                tAssetPath=[tDictionary objectForKey:SHConfigurationAssetPath];
+                NSString * tAssetPath=tDictionary[SHConfigurationAssetPath];
                 
                 if (tAssetPath!=nil)
-                {
-                    return [tFileManager fileExistsAtPath:tAssetPath];
-                }
+					return [tFileManager fileExistsAtPath:tAssetPath];
             }
             else
             {
                 NSUInteger tCount=[tIndexSet count];
                 
-                for(tDictionary in [_cachedAssetsArray objectsAtIndexes:tIndexSet])
+                for(NSDictionary * tDictionary in [_cachedAssetsArray objectsAtIndexes:tIndexSet])
                 {
-                    tAssetPath=[tDictionary objectForKey:SHConfigurationAssetPath];
+                    NSString * tAssetPath=tDictionary[SHConfigurationAssetPath];
                     
                     if (tAssetPath!=nil)
                     {
                         if ([tFileManager fileExistsAtPath:tAssetPath]==NO)
-                        {
-                            tCount--;
-                        }
+							tCount--;
                     }
                 }
                 
@@ -558,36 +536,29 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
 {
     NSInteger tClickedRow=[_assetsTableView clickedRow];
     
-    if (tClickedRow!=-1)
-    {
-        NSIndexSet * tIndexSet=[_assetsTableView selectedRowIndexes];
-        NSDictionary * tDictionary;
-        NSString * tAssetPath;
-        
-        if ([tIndexSet containsIndex:tClickedRow]==NO)
-        {
-            tDictionary=[_cachedAssetsArray objectAtIndex:tClickedRow];
-            
-            tAssetPath=[tDictionary objectForKey:SHConfigurationAssetPath];
-            
-            if (tAssetPath!=nil)
-            {
-                [[NSWorkspace sharedWorkspace] selectFile:tAssetPath inFileViewerRootedAtPath:@""];
-            }
-        }
-        else
-        {
-            for(tDictionary in [_cachedAssetsArray objectsAtIndexes:tIndexSet])
-            {
-                tAssetPath=[tDictionary objectForKey:SHConfigurationAssetPath];
-                
-                if (tAssetPath!=nil)
-                {
-                    [[NSWorkspace sharedWorkspace] selectFile:tAssetPath inFileViewerRootedAtPath:@""];
-                }
-            }
-        }
-    }
+    if (tClickedRow==-1)
+		return;
+
+	NSIndexSet * tIndexSet=[_assetsTableView selectedRowIndexes];
+	
+	if ([tIndexSet containsIndex:tClickedRow]==NO)
+	{
+		NSDictionary * tDictionary=_cachedAssetsArray[tClickedRow];
+		NSString * tAssetPath=tDictionary[SHConfigurationAssetPath];
+		
+		if (tAssetPath!=nil)
+			[[NSWorkspace sharedWorkspace] selectFile:tAssetPath inFileViewerRootedAtPath:@""];
+	}
+	else
+	{
+		for(NSDictionary * tDictionary in [_cachedAssetsArray objectsAtIndexes:tIndexSet])
+		{
+			NSString * tAssetPath=tDictionary[SHConfigurationAssetPath];
+			
+			if (tAssetPath!=nil)
+				[[NSWorkspace sharedWorkspace] selectFile:tAssetPath inFileViewerRootedAtPath:@""];
+		}
+	}
 }
 
 - (IBAction)addAsset:(id)sender
@@ -595,75 +566,66 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
     NSOpenPanel *tOpenPanel;
     
     tOpenPanel=[NSOpenPanel openPanel];
-    
-    if (tOpenPanel!=nil)
-    {
-        NSInteger tResult;
-        
-        [tOpenPanel setDelegate:self];
-        [tOpenPanel setCanChooseDirectories:YES];
-        [tOpenPanel setAllowsMultipleSelection:YES];
-        [tOpenPanel setAllowedFileTypes:[AVURLAsset audiovisualTypes]];
-        [tOpenPanel setTitle:NSLocalizedStringFromTableInBundle(@"Add video or folder",@"Localized",[NSBundle bundleForClass:[self class]],@"")];
-        [tOpenPanel setPrompt:NSLocalizedStringFromTableInBundle(@"Add",@"Localized",[NSBundle bundleForClass:[self class]],@"")];
-        
-        tResult=[tOpenPanel runModal];
-        
-        if (tResult==NSFileHandlingPanelOKButton)
-        {
-            NSArray * tURLs=[tOpenPanel URLs];
-            NSMutableIndexSet * tMutableIndexSet=[NSMutableIndexSet indexSet];
-            NSUInteger tCount=[_cachedAssetsArray count];
-            NSFileManager * tFileManager=[NSFileManager defaultManager];
-            
-            for(NSURL * tURL in tURLs)
-            {
-                if ([tURL isFileURL]==YES)
-                {
-                    NSString * tPath=[tURL path];
-                    BOOL tFound=NO;
-                    
-                    NSMutableDictionary * tMutableDictionary=[NSMutableDictionary dictionaryWithObject:tPath forKey:SHConfigurationAssetPath];
-                    BOOL isDirectory;
-                    
-                    if ([tFileManager fileExistsAtPath:tPath isDirectory:&isDirectory]==YES)
-                    {
-                        [tMutableDictionary setObject:[NSNumber numberWithBool:isDirectory] forKey:SHConfigurationAssetFolder];
-                    }
-                    else
-                    {
-                        [tMutableDictionary setObject:[NSNumber numberWithBool:YES] forKey:SHConfigurationAssetNotFound];
-                    }
-                    
-                    for(NSDictionary * tAssetDictionary in _cachedAssetsArray)
-                    {
-                        NSString * tAssetPath=[tAssetDictionary objectForKey:SHConfigurationAssetPath];
-                        
-                        if ([tAssetPath caseInsensitiveCompare:tPath]==NSOrderedSame)
-                        {
-                            tFound=YES;
-                            break;
-                        }
-                    }
-                    
-                    if (tFound==NO)
-                    {
-                        [_cachedAssetsArray addObject:tMutableDictionary];
-                        
-                        [tMutableIndexSet addIndex:tCount];
-                        tCount++;
-                    }
-                }
-            }
-            
-            if ([tMutableIndexSet count]>0)
-            {
-                [_assetsTableView reloadData];
-                
-                [_assetsTableView selectRowIndexes:tMutableIndexSet byExtendingSelection:NO];
-            }
-        }
-    }
+	
+	[tOpenPanel setDelegate:self];
+	[tOpenPanel setCanChooseDirectories:YES];
+	[tOpenPanel setAllowsMultipleSelection:YES];
+	[tOpenPanel setAllowedFileTypes:[AVURLAsset audiovisualTypes]];
+	[tOpenPanel setTitle:NSLocalizedStringFromTableInBundle(@"Add video or folder",@"Localized",[NSBundle bundleForClass:[self class]],@"")];
+	[tOpenPanel setPrompt:NSLocalizedStringFromTableInBundle(@"Add",@"Localized",[NSBundle bundleForClass:[self class]],@"")];
+	
+	NSInteger tResult=[tOpenPanel runModal];
+	
+	if (tResult==NSFileHandlingPanelOKButton)
+	{
+		NSArray * tURLs=[tOpenPanel URLs];
+		NSMutableIndexSet * tMutableIndexSet=[NSMutableIndexSet indexSet];
+		NSUInteger tCount=[_cachedAssetsArray count];
+		NSFileManager * tFileManager=[NSFileManager defaultManager];
+		
+		for(NSURL * tURL in tURLs)
+		{
+			if ([tURL isFileURL]==YES)
+			{
+				NSString * tPath=[tURL path];
+				BOOL tFound=NO;
+				
+				NSMutableDictionary * tMutableDictionary=[NSMutableDictionary dictionaryWithObject:tPath forKey:SHConfigurationAssetPath];
+				BOOL isDirectory;
+				
+				if ([tFileManager fileExistsAtPath:tPath isDirectory:&isDirectory]==YES)
+					tMutableDictionary[SHConfigurationAssetFolder]=@(isDirectory);
+				else
+					tMutableDictionary[SHConfigurationAssetNotFound]=@(YES);
+				
+				for(NSDictionary * tAssetDictionary in _cachedAssetsArray)
+				{
+					NSString * tAssetPath=tAssetDictionary[SHConfigurationAssetPath];
+					
+					if ([tAssetPath caseInsensitiveCompare:tPath]==NSOrderedSame)
+					{
+						tFound=YES;
+						break;
+					}
+				}
+				
+				if (tFound==NO)
+				{
+					[_cachedAssetsArray addObject:tMutableDictionary];
+					
+					[tMutableIndexSet addIndex:tCount];
+					tCount++;
+				}
+			}
+		}
+		
+		if ([tMutableIndexSet count]>0)
+		{
+			[_assetsTableView reloadData];
+			
+			[_assetsTableView selectRowIndexes:tMutableIndexSet byExtendingSelection:NO];
+		}
+	}
 }
 
 - (IBAction)removeAssets:(id)sender
@@ -706,20 +668,11 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
 
 - (IBAction)switchVolumeMode:(id)sender
 {
-    NSInteger tTag=[[sender selectedCell] tag];
-    
-    if (tTag!=kMovieVolumeCustom)
-    {
-        [_volumeMuteButton setEnabled:NO];
-        [_volumeSlider setEnabled:NO];
-        [_volumeFullButton setEnabled:NO];
-    }
-    else
-    {
-        [_volumeMuteButton setEnabled:YES];
-        [_volumeSlider setEnabled:YES];
-        [_volumeFullButton setEnabled:YES];
-    }
+    BOOL tEnabled=([[sender selectedCell] tag]==kMovieVolumeCustom);
+	
+	[_volumeMuteButton setEnabled:tEnabled];
+	[_volumeSlider setEnabled:tEnabled];
+	[_volumeFullButton setEnabled:tEnabled];
 }
 
 - (IBAction)setVolumeMute:(id)sender
@@ -737,14 +690,10 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
     static SHAboutBoxWindowController * sAboutBoxWindowController=nil;
     
     if (sAboutBoxWindowController==nil)
-    {
-        sAboutBoxWindowController=[SHAboutBoxWindowController new];
-    }
+		sAboutBoxWindowController=[SHAboutBoxWindowController new];
     
     if ([sAboutBoxWindowController.window isVisible]==NO)
-    {
-        [sAboutBoxWindowController.window center];
-    }
+		[sAboutBoxWindowController.window center];
     
     [sAboutBoxWindowController.window makeKeyAndOrderFront:nil];
 }
@@ -759,8 +708,6 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
         NSString *tIdentifier = [[NSBundle bundleForClass:[self class]] bundleIdentifier];
         ScreenSaverDefaults *tDefaults = [ScreenSaverDefaults defaultsForModuleWithName:tIdentifier];
 #endif
-        NSInteger tInteger;
-        NSColor *tColor;
         NSString *tString;
         
         // Assets
@@ -779,7 +726,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
         
         for(NSDictionary * tAssetDictionary in _cachedAssetsArray)
         {
-            NSString * tAssetPath=[tAssetDictionary objectForKey:SHConfigurationAssetPath];
+            NSString * tAssetPath=tAssetDictionary[SHConfigurationAssetPath];
             
             if (tAssetPath!=nil)
                 [tAssetsArray addObject:tAssetPath];
@@ -792,7 +739,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
         
             // Scaling
         
-        tInteger=[[_frameScalingMatrix selectedCell] tag];
+        NSInteger tInteger=[[_frameScalingMatrix selectedCell] tag];
         
         [tDefaults setInteger:tInteger forKey:SHUserDefaultsFrameScaling];
         
@@ -819,7 +766,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
         
         // Color
         
-        tColor=[_backgroundColorWell color];
+         NSColor *tColor=[_backgroundColorWell color];
         
         if (tColor!=nil)
         {
@@ -870,33 +817,32 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
     {
         SHAssetTableCellView * tAssetTableView = [inTableView makeViewWithIdentifier:@"AssetView" owner:self];
         
-        NSMutableDictionary * tAssetDictionary=[_cachedAssetsArray objectAtIndex:inRow];
-        NSNumber * tNumber;
+        NSMutableDictionary * tAssetDictionary=_cachedAssetsArray[inRow];
 
-        tNumber=[tAssetDictionary objectForKey:SHConfigurationAssetNotFound];
+        NSNumber * tNumber=tAssetDictionary[SHConfigurationAssetNotFound];
         
         if (tNumber==nil)
         {
             // Icon
             
-            NSImage * tIcon=[tAssetDictionary objectForKey:SHConfigurationAssetIcon];
+            NSImage * tIcon=tAssetDictionary[SHConfigurationAssetIcon];
             
             if (tIcon==nil)
             {
-                tIcon=[[NSWorkspace sharedWorkspace] iconForFile:[tAssetDictionary objectForKey:SHConfigurationAssetPath]];
+                tIcon=[[NSWorkspace sharedWorkspace] iconForFile:tAssetDictionary[SHConfigurationAssetPath]];
                 
                 if (tIcon!=nil)
-                    [tAssetDictionary setObject:tIcon forKey:SHConfigurationAssetIcon];
+                    tAssetDictionary[SHConfigurationAssetIcon]=tIcon;
             }
             
-            if ([[tAssetDictionary objectForKey:SHConfigurationAssetFolder] boolValue]==YES)
+            if ([tAssetDictionary[SHConfigurationAssetFolder] boolValue]==YES)
             {
                 [tAssetTableView.textField setHidden:YES];
                 [tAssetTableView.durationLabel setHidden:YES];
                 [tAssetTableView.folderNameLabel setHidden:NO];
                 [tAssetTableView.folderAssetsCountLabel setHidden:NO];
                 
-                [tAssetTableView.folderNameLabel setStringValue:[[tAssetDictionary objectForKey:SHConfigurationAssetPath] lastPathComponent]];
+                [tAssetTableView.folderNameLabel setStringValue:[tAssetDictionary[SHConfigurationAssetPath] lastPathComponent]];
                 
                 [tAssetTableView.folderNameLabel setTextColor:[NSColor blackColor]];
             
@@ -904,13 +850,13 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
                 
                 // Number of assets at first level of folder
                 
-                NSNumber * tNumber=[tAssetDictionary objectForKey:SHConfigurationAssetFolderAssetsCount];
+                NSNumber * tNumber=tAssetDictionary[SHConfigurationAssetFolderAssetsCount];
                 
                 if (tNumber==nil)
                 {
                     [tAssetTableView.folderAssetsCountLabel setStringValue:@"-"];
                     
-                    [NSThread detachNewThreadSelector:@selector(getAssetsCountThread:) toTarget:self withObject:[tAssetDictionary objectForKey:SHConfigurationAssetPath]];
+                    [NSThread detachNewThreadSelector:@selector(getAssetsCountThread:) toTarget:self withObject:tAssetDictionary[SHConfigurationAssetPath]];
                 }
                 else
                 {
@@ -924,15 +870,13 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
                 [tAssetTableView.folderNameLabel setHidden:YES];
                 [tAssetTableView.folderAssetsCountLabel setHidden:YES];
                 
-                [tAssetTableView.textField setStringValue:[[tAssetDictionary objectForKey:SHConfigurationAssetPath] lastPathComponent]];
+                [tAssetTableView.textField setStringValue:[tAssetDictionary[SHConfigurationAssetPath] lastPathComponent]];
                 
                 tAssetTableView.imageView.image=tIcon;
                 
-                NSString * tString;
-                
                 // Duration
                 
-                tString=[tAssetDictionary objectForKey:SHConfigurationAssetDuration];
+                NSString * tString=tAssetDictionary [SHConfigurationAssetDuration];
                 
                 if (tString==nil)
                 {
@@ -940,7 +884,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
                     
                     [tAssetTableView.durationLabel setStringValue:@"--:--:--"];
                     
-                    [NSThread detachNewThreadSelector:@selector(getAssetDurationThread:) toTarget:self withObject:[tAssetDictionary objectForKey:SHConfigurationAssetPath]];
+                    [NSThread detachNewThreadSelector:@selector(getAssetDurationThread:) toTarget:self withObject:tAssetDictionary[SHConfigurationAssetPath]];
                 }
                 else
                 {
@@ -955,7 +899,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
             [tAssetTableView.folderNameLabel setHidden:NO];
             [tAssetTableView.folderAssetsCountLabel setHidden:YES];
             
-            [tAssetTableView.folderNameLabel setStringValue:[[tAssetDictionary objectForKey:SHConfigurationAssetPath] lastPathComponent]];
+            [tAssetTableView.folderNameLabel setStringValue:[tAssetDictionary[SHConfigurationAssetPath] lastPathComponent]];
             
             [tAssetTableView.folderNameLabel setTextColor:[NSColor redColor]];
             
@@ -992,12 +936,8 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
 {
     if (inTableView==_assetsTableView && inDropOperation==NSTableViewDropAbove)
     {
-        NSPasteboard * tPasteboard;
-        NSString * tPasteboardType;
-        
-        tPasteboard=[inDraggingInfo draggingPasteboard];
-        
-        tPasteboardType=[tPasteboard availableTypeFromArray:[NSArray arrayWithObjects:SHPasteboardTypeSelectedRows,NSFilenamesPboardType,nil]];
+		NSPasteboard * tPasteboard=[inDraggingInfo draggingPasteboard];
+		NSString * tPasteboardType=[tPasteboard availableTypeFromArray:@[SHPasteboardTypeSelectedRows,NSFilenamesPboardType]];
         
         if ([tPasteboardType isEqualToString:SHPasteboardTypeSelectedRows]==YES)
         {
@@ -1035,7 +975,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
                 
                 for(NSDictionary * tAssetDictionary in _cachedAssetsArray)
                 {
-                    NSString * tAssetPath=[tAssetDictionary objectForKey:SHConfigurationAssetPath];
+                    NSString * tAssetPath=tAssetDictionary[SHConfigurationAssetPath];
                     
                     if ([tAssetPath caseInsensitiveCompare:tFile]==NSOrderedSame)
                     {
@@ -1084,13 +1024,10 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
 {
     if (inTableView==_assetsTableView)
     {
-        NSPasteboard * tPasteboard;
-        NSString * tPasteboardType;
         NSMutableArray * tNewAssets=nil;
         
-        tPasteboard=[inDraggingInfo draggingPasteboard];
-        
-        tPasteboardType=[tPasteboard availableTypeFromArray:[NSArray arrayWithObjects:SHPasteboardTypeSelectedRows,NSFilenamesPboardType,nil]];
+        NSPasteboard * tPasteboard=[inDraggingInfo draggingPasteboard];
+		NSString * tPasteboardType=[tPasteboard availableTypeFromArray:@[SHPasteboardTypeSelectedRows,NSFilenamesPboardType]];
         
         if ([tPasteboardType isEqualToString:SHPasteboardTypeSelectedRows]==YES)
         {
@@ -1121,7 +1058,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
                 
                 for(NSDictionary * tAssetDictionary in _cachedAssetsArray)
                 {
-                    NSString * tAssetPath=[tAssetDictionary objectForKey:SHConfigurationAssetPath];
+                    NSString * tAssetPath=tAssetDictionary[SHConfigurationAssetPath];
                     
                     if ([tAssetPath caseInsensitiveCompare:tFile]==NSOrderedSame)
                     {
@@ -1140,7 +1077,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
                         {
                             NSMutableDictionary * tMutableDictionary=[NSMutableDictionary dictionaryWithObject:tFile forKey:SHConfigurationAssetPath];
                             
-                            [tMutableDictionary setObject:[NSNumber numberWithBool:YES] forKey:SHConfigurationAssetFolder];
+                            tMutableDictionary[SHConfigurationAssetFolder]=@(YES);
                             
                             [tNewAssets addObject:tMutableDictionary];
                         }
@@ -1156,7 +1093,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
                                 {
                                     NSMutableDictionary * tMutableDictionary=[NSMutableDictionary dictionaryWithObject:tFile forKey:SHConfigurationAssetPath];
                                     
-                                    [tMutableDictionary setObject:[NSNumber numberWithBool:NO] forKey:SHConfigurationAssetFolder];
+                                    tMutableDictionary[SHConfigurationAssetFolder]=@(NO);
                                     
                                     [tNewAssets addObject:tMutableDictionary];
                                 }
