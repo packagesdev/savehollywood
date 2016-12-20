@@ -27,6 +27,7 @@
 #define METADATA_DISPLAY_DURATION 5.0
 
 NSString * const SHScreenKey=@"screen#";
+NSString * const SHScreenKeyKeyed=@"screen.keyed#";
 NSString * const SHAssetTimeKey=@"asset.time";
 NSString * const SHAssetURLKey=@"asset.url";
 
@@ -65,7 +66,11 @@ NSUInteger random_no(NSUInteger n)
     NSInteger _volumeMode;
     float _volumeLevel;
     
-    // Layers
+	// Workaround for Apple bug in Sierra
+	
+	BOOL _useKeyedArchiverForLeftOffData;
+	
+	// Layers
     
     CALayer * _backgroundLayer;
     AVPlayerLayer * _AVPlayerLayer;
@@ -142,7 +147,16 @@ NSUInteger random_no(NSUInteger n)
     
     if (self!=nil)
     {
-        [self setAnimationTimeInterval:1.0];
+		SInt32 tMajorVersion,tMinorVersion,tBugFixVersion;
+		
+		Gestalt(gestaltSystemVersionMajor,&tMajorVersion);
+		Gestalt(gestaltSystemVersionMinor,&tMinorVersion);
+		Gestalt(gestaltSystemVersionBugFix,&tBugFixVersion);
+		
+		
+		_useKeyedArchiverForLeftOffData=(tMajorVersion>10 || (tMajorVersion==10 && tMinorVersion>=12));
+		
+		[self setAnimationTimeInterval:1.0];
         
         _fileManager=[NSFileManager defaultManager];
 		
@@ -496,15 +510,23 @@ NSUInteger random_no(NSUInteger n)
                         
                             if (tScreenIndex!=NSNotFound)
                             {
-                                NSString * tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKey,(unsigned long)tScreenIndex];
-                                
-                                if ([tDefaults boolForKey:SHUserDefaultsAssetsStartWhereLeftOff]==YES)
+								NSString * tScreenKey;
+								
+								if (_useKeyedArchiverForLeftOffData==YES)
+									tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKeyKeyed,(unsigned long)tScreenIndex];
+								else
+									tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKey,(unsigned long)tScreenIndex];
+								
+								if ([tDefaults boolForKey:SHUserDefaultsAssetsStartWhereLeftOff]==YES)
                                 {
                                     NSData * tData=[tDefaults objectForKey:tScreenKey];
                                     
                                     if (tData!=nil)
                                     {
-                                        tLastKnownAssetDictionary=[NSUnarchiver unarchiveObjectWithData:tData];
+										if (_useKeyedArchiverForLeftOffData==YES)
+											tLastKnownAssetDictionary=[NSKeyedUnarchiver unarchiveObjectWithData:tData];
+										else
+											tLastKnownAssetDictionary=[NSUnarchiver unarchiveObjectWithData:tData];
                                         
                                         if (tLastKnownAssetDictionary==nil)
                                             NSLog(@"Error when unarchiving last known asset for %@",tScreenKey);
@@ -595,11 +617,15 @@ NSUInteger random_no(NSUInteger n)
         
         if (tScreenIndex!=NSNotFound)
         {
-            NSString * tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKey,(unsigned long)tScreenIndex];
+			NSString * tScreenKey;
+			
+			if (_useKeyedArchiverForLeftOffData==YES)
+				tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKeyKeyed,(unsigned long)tScreenIndex];
+			else
+				tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKey,(unsigned long)tScreenIndex];
             
             if ([tDefaults boolForKey:SHUserDefaultsAssetsStartWhereLeftOff]==YES)
             {
-                
                 NSURL * tCurrentURL=[((AVURLAsset *) _AVPlayerLayer.player.currentItem.asset) URL];
                 
                 if (tCurrentURL!=nil)
@@ -609,9 +635,14 @@ NSUInteger random_no(NSUInteger n)
             
 					NSDictionary * tLastAssetDictionary=@{SHAssetTimeKey:tValue,
 														  SHAssetURLKey:tCurrentURL};
-                
-                    NSData * tData=[NSArchiver archivedDataWithRootObject:tLastAssetDictionary];
-                    
+					
+					NSData * tData=nil;
+					
+					if (_useKeyedArchiverForLeftOffData==YES)
+						tData=[NSKeyedArchiver archivedDataWithRootObject:tLastAssetDictionary];
+                    else
+						tData=[NSArchiver archivedDataWithRootObject:tLastAssetDictionary];
+						
                     if (tData!=nil)
                         [tDefaults setObject:tData forKey:tScreenKey];
                 }
