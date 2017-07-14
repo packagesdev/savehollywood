@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2012-2014, Stephane Sudre
+ Copyright (c) 2012-2016, Stephane Sudre
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -27,6 +27,7 @@
 #define METADATA_DISPLAY_DURATION 5.0
 
 NSString * const SHScreenKey=@"screen#";
+NSString * const SHScreenKeyKeyed=@"screen.keyed#";
 NSString * const SHAssetTimeKey=@"asset.time";
 NSString * const SHAssetURLKey=@"asset.url";
 
@@ -65,7 +66,11 @@ NSUInteger random_no(NSUInteger n)
     NSInteger _volumeMode;
     float _volumeLevel;
     
-    // Layers
+	// Workaround for Apple bug in Sierra
+	
+	BOOL _useKeyedArchiverForLeftOffData;
+	
+	// Layers
     
     CALayer * _backgroundLayer;
     AVPlayerLayer * _AVPlayerLayer;
@@ -142,7 +147,16 @@ NSUInteger random_no(NSUInteger n)
     
     if (self!=nil)
     {
-        [self setAnimationTimeInterval:1.0];
+		SInt32 tMajorVersion,tMinorVersion,tBugFixVersion;
+		
+		Gestalt(gestaltSystemVersionMajor,&tMajorVersion);
+		Gestalt(gestaltSystemVersionMinor,&tMinorVersion);
+		Gestalt(gestaltSystemVersionBugFix,&tBugFixVersion);
+		
+		
+		_useKeyedArchiverForLeftOffData=(tMajorVersion>10 || (tMajorVersion==10 && tMinorVersion>=12));
+		
+		[self setAnimationTimeInterval:1.0];
         
         _fileManager=[NSFileManager defaultManager];
 		
@@ -171,19 +185,14 @@ NSUInteger random_no(NSUInteger n)
 {
     if (_preview==NO)
     {
-        NSString * tString;
         BOOL tCanChangeVolume=(_volumeMode!=kMovieVolumeMute);
-        NSUInteger tLength;
         
-        tString=[inEvent characters];
-        
-        tLength=[tString length];
+        NSString * tString=[inEvent characters];
+        NSUInteger tLength=[tString length];
         
         for(NSUInteger tIndex=0;tIndex<tLength;tIndex++)
         {
-            unichar tChar;
-            
-            tChar=[tString characterAtIndex:tIndex];
+            unichar tChar=[tString characterAtIndex:tIndex];
             
             switch(tChar)
             {
@@ -264,7 +273,6 @@ NSUInteger random_no(NSUInteger n)
 
 - (void)startAnimation
 {
-    BOOL tBool;
 #ifdef __TEST_SCREENSAVER__
     NSUserDefaults *tDefaults = [NSUserDefaults standardUserDefaults];
 #else
@@ -274,7 +282,7 @@ NSUInteger random_no(NSUInteger n)
     [super startAnimation];
 #endif
     
-    tBool=[tDefaults boolForKey:SHUserDefaultsMainDisplayOnly];
+     BOOL tBool=[tDefaults boolForKey:SHUserDefaultsMainDisplayOnly];
     
     if (tBool==NO || _mainScreen==YES)
     {
@@ -295,11 +303,9 @@ NSUInteger random_no(NSUInteger n)
         
         if (_backgroundLayer!=nil)
         {
-            NSString * tString;
             NSColor * tColor=nil;
             CGFloat tColorComponents[4];
             CGColorRef tCGColorRef;
-            id tObject;
             NSMutableArray * tAssets;
             
             // Frame
@@ -324,7 +330,7 @@ NSUInteger random_no(NSUInteger n)
             
                 // Background Color
             
-            tString=[tDefaults stringForKey:SHUserDefaultsBackgroundColor];
+            NSString * tString=[tDefaults stringForKey:SHUserDefaultsBackgroundColor];
             
             if (tString!=nil)
                 tColor=[NSColor colorFromString:tString];
@@ -357,7 +363,7 @@ NSUInteger random_no(NSUInteger n)
             
                 // Custom Value
             
-            tObject=[tDefaults objectForKey:SHUserDefaultsMovieVolumeCustomValue];
+            id tObject=[tDefaults objectForKey:SHUserDefaultsMovieVolumeCustomValue];
             
             if (tObject==nil)
                 _volumeLevel=1.0f;
@@ -413,11 +419,9 @@ NSUInteger random_no(NSUInteger n)
                     {
                         if ([tURL isFileURL]==YES)
                         {
-                            NSString * tAbsolutePath;
+                            NSString * tAbsolutePath=[tURL path];
                             BOOL tIsDirectory;
-                            
-                            tAbsolutePath=[tURL path];
-                            
+							
                             if ([_fileManager fileExistsAtPath:tAbsolutePath isDirectory:&tIsDirectory]==YES)
                             {
                                 if (tIsDirectory==NO)
@@ -506,15 +510,23 @@ NSUInteger random_no(NSUInteger n)
                         
                             if (tScreenIndex!=NSNotFound)
                             {
-                                NSString * tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKey,(unsigned long)tScreenIndex];
-                                
-                                if ([tDefaults boolForKey:SHUserDefaultsAssetsStartWhereLeftOff]==YES)
+								NSString * tScreenKey;
+								
+								if (_useKeyedArchiverForLeftOffData==YES)
+									tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKeyKeyed,(unsigned long)tScreenIndex];
+								else
+									tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKey,(unsigned long)tScreenIndex];
+								
+								if ([tDefaults boolForKey:SHUserDefaultsAssetsStartWhereLeftOff]==YES)
                                 {
                                     NSData * tData=[tDefaults objectForKey:tScreenKey];
                                     
                                     if (tData!=nil)
                                     {
-                                        tLastKnownAssetDictionary=[NSUnarchiver unarchiveObjectWithData:tData];
+										if (_useKeyedArchiverForLeftOffData==YES)
+											tLastKnownAssetDictionary=[NSKeyedUnarchiver unarchiveObjectWithData:tData];
+										else
+											tLastKnownAssetDictionary=[NSUnarchiver unarchiveObjectWithData:tData];
                                         
                                         if (tLastKnownAssetDictionary==nil)
                                             NSLog(@"Error when unarchiving last known asset for %@",tScreenKey);
@@ -539,11 +551,10 @@ NSUInteger random_no(NSUInteger n)
                             
             // No playable asset available => Display text
             
-            CATextLayer * tWarningTextLayer;
             CGRect tBackgroundFrame=_backgroundLayer.bounds;
             CGRect tFrame;
             
-            tWarningTextLayer=[CATextLayer layer];
+            CATextLayer * tWarningTextLayer=[CATextLayer layer];
             
             tWarningTextLayer.font=@"Lucida Grande Bold";
             tWarningTextLayer.alignmentMode=kCAAlignmentCenter;
@@ -606,11 +617,15 @@ NSUInteger random_no(NSUInteger n)
         
         if (tScreenIndex!=NSNotFound)
         {
-            NSString * tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKey,(unsigned long)tScreenIndex];
+			NSString * tScreenKey;
+			
+			if (_useKeyedArchiverForLeftOffData==YES)
+				tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKeyKeyed,(unsigned long)tScreenIndex];
+			else
+				tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKey,(unsigned long)tScreenIndex];
             
             if ([tDefaults boolForKey:SHUserDefaultsAssetsStartWhereLeftOff]==YES)
             {
-                
                 NSURL * tCurrentURL=[((AVURLAsset *) _AVPlayerLayer.player.currentItem.asset) URL];
                 
                 if (tCurrentURL!=nil)
@@ -618,12 +633,16 @@ NSUInteger random_no(NSUInteger n)
                     CMTime tCurrentTime=[_AVPlayerLayer.player currentTime];
                     NSValue * tValue=[NSValue valueWithCMTime:tCurrentTime];
             
-                    NSDictionary * tLastAssetDictionary=[NSDictionary dictionaryWithObjectsAndKeys:tValue,SHAssetTimeKey,
-                                                                                                   tCurrentURL,SHAssetURLKey,
-                                                                                                   nil];
-                
-                    NSData * tData=[NSArchiver archivedDataWithRootObject:tLastAssetDictionary];
-                    
+					NSDictionary * tLastAssetDictionary=@{SHAssetTimeKey:tValue,
+														  SHAssetURLKey:tCurrentURL};
+					
+					NSData * tData=nil;
+					
+					if (_useKeyedArchiverForLeftOffData==YES)
+						tData=[NSKeyedArchiver archivedDataWithRootObject:tLastAssetDictionary];
+                    else
+						tData=[NSArchiver archivedDataWithRootObject:tLastAssetDictionary];
+						
                     if (tData!=nil)
                         [tDefaults setObject:tData forKey:tScreenKey];
                 }
@@ -650,7 +669,6 @@ NSUInteger random_no(NSUInteger n)
         [_timer invalidate];
         
         [_timer release];
-        
         _timer=nil;
     }
     
@@ -698,7 +716,7 @@ NSUInteger random_no(NSUInteger n)
     
     while (__arrayIndex<tCount)
     {
-        NSURL * tURL=[__assetsArray objectAtIndex:__arrayIndex];
+        NSURL * tURL=__assetsArray[__arrayIndex];
         
         if ([tURL isFileURL]==YES)
         {
@@ -800,11 +818,9 @@ NSUInteger random_no(NSUInteger n)
         if (_scaling==kMovieFrameActualSize)
         {
             CGSize tAssetSize=tAsset.naturalSize;
-            CGFloat tRatio;
-            CGFloat tYRatio;
             
-            tRatio=tAssetSize.width/tBackgroundFrame.size.width;
-            tYRatio=tAssetSize.height/tBackgroundFrame.size.height;
+            CGFloat tRatio=tAssetSize.width/tBackgroundFrame.size.width;
+            CGFloat tYRatio=tAssetSize.height/tBackgroundFrame.size.height;
             
             if (tYRatio>tRatio)
             {
@@ -963,8 +979,8 @@ NSUInteger random_no(NSUInteger n)
             }
             else
             {
-                tTitleLayer=[[_metadataLayer sublayers] objectAtIndex:0];
-                tCopyrightLayer=[[_metadataLayer sublayers] objectAtIndex:1];
+                tTitleLayer=(CATextLayer *)[_metadataLayer sublayers][0];
+                tCopyrightLayer=(CATextLayer *)[_metadataLayer sublayers][1];
             }
             
             if (_metadadataMode==kMovieFrameShowMetadataPeriodically)
@@ -993,7 +1009,7 @@ NSUInteger random_no(NSUInteger n)
                              
                              if ([tMetadataItemsArray count]>0)
                              {
-                                 _currentAssetMetadataTitle=[[NSString alloc] initWithString:[[tMetadataItemsArray objectAtIndex:0] stringValue]];
+                                 _currentAssetMetadataTitle=[[NSString alloc] initWithString:[tMetadataItemsArray[0] stringValue]];
                              }
                          }
                          
@@ -1007,7 +1023,7 @@ NSUInteger random_no(NSUInteger n)
                          
                              if ([tMetadataItemsArray count]>0)
                              {
-                                 _currentAssetMetadataCopyrights=[[NSString alloc] initWithString:[[tMetadataItemsArray objectAtIndex:0] stringValue]];
+                                 _currentAssetMetadataCopyrights=[[NSString alloc] initWithString:[tMetadataItemsArray[0] stringValue]];
                              }
                          }
                          
@@ -1037,9 +1053,7 @@ NSUInteger random_no(NSUInteger n)
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideMetadata:) object:nil];
     
     if (_currentAssetMetadataTitle!=nil || _currentAssetMetadataCopyrights!=nil)
-    {
-        [_metadataLayer setOpacity:1.0];
-    }
+		[_metadataLayer setOpacity:1.0];
     
     [self performSelector:@selector(hideMetadata:) withObject:nil afterDelay:METADATA_DISPLAY_DURATION];
 }
@@ -1058,14 +1072,10 @@ NSUInteger random_no(NSUInteger n)
 
 - (NSWindow*)configureSheet
 {
-    NSWindow * tWindow;
-    
     if (_configurationWindowController==nil)
-    {
-        _configurationWindowController=[[SHConfigurationWindowController alloc] init];
-    }
+		_configurationWindowController=[[SHConfigurationWindowController alloc] init];
     
-    tWindow=_configurationWindowController.window;
+    NSWindow * tWindow=_configurationWindowController.window;
     
     [_configurationWindowController refreshSettings];
     
@@ -1087,7 +1097,6 @@ NSUInteger random_no(NSUInteger n)
             [_timer invalidate];
             
             [_timer release];
-            
             _timer=nil;
         }
         
@@ -1159,9 +1168,7 @@ NSUInteger random_no(NSUInteger n)
         _volumeLevel+=0.1f;
         
         if (_volumeLevel>1.0f)
-        {
-            _volumeLevel=1.0f;
-        }
+			_volumeLevel=1.0f;
         
         if (tCurrentPlayer!=nil)
         {
@@ -1182,9 +1189,7 @@ NSUInteger random_no(NSUInteger n)
         _volumeLevel-=0.1f;
         
         if (_volumeLevel<0.0f)
-        {
-            _volumeLevel=0.0f;
-        }
+			_volumeLevel=0.0f;
     
         if (tCurrentPlayer!=nil)
         {
