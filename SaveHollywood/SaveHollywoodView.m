@@ -16,6 +16,8 @@
 
 #import "SHUserDefaults+Constants.h"
 
+#import "SHPlayingAssetsRegister.h"
+
 #import "NSColor+String.h"
 #import "NSArray+Shuffle.h"
 
@@ -95,7 +97,7 @@ NSUInteger random_no(NSUInteger n)
 
 - (NSUInteger)screenIndex;
 
-- (BOOL)playNextAsset:(NSDictionary *)preferredNextAssetDictionary;
+- (BOOL)playNextAsset:(NSDictionary *)preferredNextAssetDictionary canPlaySameRandomMovieTwice:(BOOL)inCanPlaySameRandomMovieTwice;
 
 - (void)switchMutedState:(NSNotification *)inNotification;
 - (void)increaseVolume:(NSNotificationCenter *)inNotification;
@@ -541,7 +543,7 @@ NSUInteger random_no(NSUInteger n)
                         
                         // Play the next asset
                         
-                        if ([self playNextAsset:tLastKnownAssetDictionary]==YES)
+                        if ([self playNextAsset:tLastKnownAssetDictionary canPlaySameRandomMovieTwice:NO]==YES)
                         {
                             return;
                         }
@@ -664,6 +666,8 @@ NSUInteger random_no(NSUInteger n)
     
     [_AVPlayerLayer.player pause];
     
+    [[SHPlayingAssetsRegister sharedRegister] removeAsset:((AVURLAsset *)_AVPlayerLayer.player.currentItem.asset).URL];
+    
     if (_timer!=nil)
     {
         [_timer invalidate];
@@ -691,12 +695,12 @@ NSUInteger random_no(NSUInteger n)
 #endif
 }
 
-- (BOOL) playNextAsset:(NSDictionary *)preferredNextAssetDictionary
+- (BOOL)playNextAsset:(NSDictionary *)preferredNextAssetDictionary canPlaySameRandomMovieTwice:(BOOL)inCanPlaySameRandomMovieTwice
 {
     NSUInteger tCount=[__assetsArray count];
     AVURLAsset * tAsset=nil;
     NSUInteger tNextIndex=__arrayIndex;
-    NSURL * tPreferredNextURL=[preferredNextAssetDictionary objectForKey:SHAssetURLKey];
+    NSURL * tPreferredNextURL=preferredNextAssetDictionary[SHAssetURLKey];
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideMetadata:) object:nil];
     
@@ -724,6 +728,10 @@ NSUInteger random_no(NSUInteger n)
             
             if ([_fileManager fileExistsAtPath:tAbsolutePath]==YES)
             {
+                // Check whether the asset is not already being played
+                
+                // A COMPLETER
+                
                 tAsset=[AVURLAsset assetWithURL:tURL];
                 
                 if ([tAsset isPlayable]==NO)
@@ -736,12 +744,19 @@ NSUInteger random_no(NSUInteger n)
                 }
                 else
                 {
-                    if (tPreferredNextURL==nil || [tPreferredNextURL isEqualTo:tURL]==YES)
+                    if (_randomOrder==YES && inCanPlaySameRandomMovieTwice==NO && [[SHPlayingAssetsRegister sharedRegister] isPlayingAsset:tURL]==YES)
                     {
-                        break;
+                        tAsset=nil;
+                        
+                        __arrayIndex++;
                     }
                     else
                     {
+                        if (tPreferredNextURL==nil || [tPreferredNextURL isEqualTo:tURL]==YES)
+                        {
+                            break;
+                        }
+
                         __arrayIndex++;
                     }
                 }
@@ -769,13 +784,25 @@ NSUInteger random_no(NSUInteger n)
     
     if (tAsset==nil)
     {
-        if ((tNextIndex>0 || tPreferredNextURL!=nil) && tCount>0)
+        if (tCount==0)
+            return NO;
+        
+        if (_randomOrder==YES && inCanPlaySameRandomMovieTwice==NO)
         {
             // We at least played once asset previously (or we were looking for the last known asset)
             
             __arrayIndex=0;
             
-            return [self playNextAsset:nil];
+            return [self playNextAsset:nil canPlaySameRandomMovieTwice:YES];
+        }
+        
+        if (tNextIndex>0 || tPreferredNextURL!=nil)
+        {
+            // We at least played once asset previously (or we were looking for the last known asset)
+            
+            __arrayIndex=0;
+            
+            return [self playNextAsset:nil canPlaySameRandomMovieTwice:NO];
         }
         
         return NO;
@@ -787,262 +814,264 @@ NSUInteger random_no(NSUInteger n)
     {
         __arrayIndex++;
         
-        [self playNextAsset:nil];
+        return [self playNextAsset:nil canPlaySameRandomMovieTwice:NO];
     }
-    else
+
+    AVPlayer * tAVPlayer=[[AVPlayer alloc] initWithPlayerItem:tAVPlayerItem];
+    
+    [tAVPlayerItem release];
+    
+    
+    [_AVPlayerLayer removeFromSuperlayer];
+    _AVPlayerLayer=nil;
+    
+    _AVPlayerLayer=[AVPlayerLayer playerLayerWithPlayer:tAVPlayer];
+    
+    [tAVPlayer release];
+    
+    if (_AVPlayerLayer==nil)
     {
-        AVPlayer * tAVPlayer=[[AVPlayer alloc] initWithPlayerItem:tAVPlayerItem];
+        // Display an error message instead of the movie
         
-        [tAVPlayerItem release];
+        // A COMPLETER
         
+        return NO;
+    }
+    
+    CGRect tBackgroundFrame=_backgroundLayer.bounds;
+    CGRect tFrame=tBackgroundFrame;
+    
+    if (_scaling==kMovieFrameActualSize)
+    {
+        CGSize tAssetSize=tAsset.naturalSize;
         
-        [_AVPlayerLayer removeFromSuperlayer];
-        _AVPlayerLayer=nil;
+        CGFloat tRatio=tAssetSize.width/tBackgroundFrame.size.width;
+        CGFloat tYRatio=tAssetSize.height/tBackgroundFrame.size.height;
         
-        _AVPlayerLayer=[AVPlayerLayer playerLayerWithPlayer:tAVPlayer];
-        
-        [tAVPlayer release];
-        
-        if (_AVPlayerLayer==nil)
+        if (tYRatio>tRatio)
         {
-            // Display an error message instead of the movie
-            
-            // A COMPLETER
-            
-            return NO;
+            tRatio=tYRatio;
         }
         
-        CGRect tBackgroundFrame=_backgroundLayer.bounds;
-        CGRect tFrame=tBackgroundFrame;
-        
-        if (_scaling==kMovieFrameActualSize)
+        if (tRatio>=1.0f)
         {
-            CGSize tAssetSize=tAsset.naturalSize;
+            tAssetSize.width=round(tAssetSize.width/tRatio);
+            tAssetSize.height=round(tAssetSize.height/tRatio);
+        }
+        
+        if (_randomPosition==YES && tRatio<1.0)
+        {
+            // Make sure we can randomize the position
             
-            CGFloat tRatio=tAssetSize.width/tBackgroundFrame.size.width;
-            CGFloat tYRatio=tAssetSize.height/tBackgroundFrame.size.height;
+            NSSize tSize=tAssetSize;
             
-            if (tYRatio>tRatio)
-            {
-                tRatio=tYRatio;
-            }
-            
-            if (tRatio>=1.0f)
-            {
-                tAssetSize.width=round(tAssetSize.width/tRatio);
-                tAssetSize.height=round(tAssetSize.height/tRatio);
-            }
-            
-            if (_randomPosition==YES && tRatio<1.0)
-            {
-                // Make sure we can randomize the position
-                
-                NSSize tSize=tAssetSize;
-                 
-                tFrame.origin=SSRandomPointForSizeWithinRect(tAssetSize,tBackgroundFrame);
-                tFrame.size=tSize;
-            }
-            else
-            {
-                if (_drawBorder==YES)
-                {
-                    if (tAssetSize.width>(tBackgroundFrame.size.width-2*BORDER_SIZE))
-                    {
-                        tAssetSize.width=tBackgroundFrame.size.width-2*BORDER_SIZE;
-                    }
-                    
-                    if (tAssetSize.height>(tBackgroundFrame.size.height-2*BORDER_SIZE))
-                    {
-                        tAssetSize.height=tBackgroundFrame.size.height-2*BORDER_SIZE;
-                    }
-                }
-                
-                tFrame.size=tAssetSize;
-                
-                tFrame.origin.x=round(tBackgroundFrame.origin.x+(tBackgroundFrame.size.width-tAssetSize.width)*0.5);
-                tFrame.origin.y=round(tBackgroundFrame.origin.y+(tBackgroundFrame.size.height-tAssetSize.height)*0.5);
-            }
+            tFrame.origin=SSRandomPointForSizeWithinRect(tAssetSize,tBackgroundFrame);
+            tFrame.size=tSize;
         }
         else
         {
-            if (_scaling==kMovieFrameSizeToFill)
-                _AVPlayerLayer.videoGravity=AVLayerVideoGravityResizeAspectFill;
-            else
-                _AVPlayerLayer.videoGravity=AVLayerVideoGravityResizeAspect;
-            
             if (_drawBorder==YES)
             {
-                tFrame=CGRectInset(tBackgroundFrame, BORDER_SIZE, BORDER_SIZE);
-            }
-        }
-        
-        _AVPlayerLayer.frame=tFrame;
-        
-        [_backgroundLayer insertSublayer:_AVPlayerLayer atIndex:0];
-        
-#ifdef __DEBUG_LOG__
-        NSLog(@"Add PlayerLayer");
-#endif
-        // Set Volume
-        
-        switch(_volumeMode)
-        {
-            case kMovieVolumeMute:
-                
-                _AVPlayerLayer.player.volume=0.0;
-                
-                break;
-                
-            case kMovieVolumeNormal:
-            
-                if (_volumeLevelHasBeenModified==NO)
+                if (tAssetSize.width>(tBackgroundFrame.size.width-2*BORDER_SIZE))
                 {
-                    if ([tAsset statusOfValueForKey:@"preferredVolume" error:NULL]==AVKeyValueStatusLoaded)
-                    {
-                        _volumeLevel=tAsset.preferredVolume;
-                    }
-                    else
-                    {
-                        _volumeLevel=1.0f;
-                    }
+                    tAssetSize.width=tBackgroundFrame.size.width-2*BORDER_SIZE;
                 }
                 
-            default:
-                
-                if (_audioMainScreen==NO || _mainScreen==YES)
+                if (tAssetSize.height>(tBackgroundFrame.size.height-2*BORDER_SIZE))
                 {
-                    _AVPlayerLayer.player.volume=(_liveMuted==YES) ? 0.0f :_volumeLevel;
+                    tAssetSize.height=tBackgroundFrame.size.height-2*BORDER_SIZE;
+                }
+            }
+            
+            tFrame.size=tAssetSize;
+            
+            tFrame.origin.x=round(tBackgroundFrame.origin.x+(tBackgroundFrame.size.width-tAssetSize.width)*0.5);
+            tFrame.origin.y=round(tBackgroundFrame.origin.y+(tBackgroundFrame.size.height-tAssetSize.height)*0.5);
+        }
+    }
+    else
+    {
+        if (_scaling==kMovieFrameSizeToFill)
+            _AVPlayerLayer.videoGravity=AVLayerVideoGravityResizeAspectFill;
+        else
+            _AVPlayerLayer.videoGravity=AVLayerVideoGravityResizeAspect;
+        
+        if (_drawBorder==YES)
+        {
+            tFrame=CGRectInset(tBackgroundFrame, BORDER_SIZE, BORDER_SIZE);
+        }
+    }
+    
+    _AVPlayerLayer.frame=tFrame;
+    
+    [_backgroundLayer insertSublayer:_AVPlayerLayer atIndex:0];
+    
+#ifdef __DEBUG_LOG__
+    NSLog(@"Add PlayerLayer");
+#endif
+    // Set Volume
+    
+    switch(_volumeMode)
+    {
+        case kMovieVolumeMute:
+            
+            _AVPlayerLayer.player.volume=0.0;
+            
+            break;
+            
+        case kMovieVolumeNormal:
+        
+            if (_volumeLevelHasBeenModified==NO)
+            {
+                if ([tAsset statusOfValueForKey:@"preferredVolume" error:NULL]==AVKeyValueStatusLoaded)
+                {
+                    _volumeLevel=tAsset.preferredVolume;
                 }
                 else
                 {
-                    _AVPlayerLayer.player.volume=0;
+                    _volumeLevel=1.0f;
                 }
-                
-                break;
-        }
-        
-        NSValue * tValue=[preferredNextAssetDictionary objectForKey:SHAssetTimeKey];
-        
-        if (tValue!=nil)
-        {
-            CMTime tSeekTime=[tValue CMTimeValue];
+            }
             
-            [_AVPlayerLayer.player seekToTime:tSeekTime toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
-        }
-        
-        [_AVPlayerLayer.player play];
-        
-        if (_preview==NO && _showMetadata==YES)
-        {
-            CATextLayer * tTitleLayer;
-            CATextLayer * tCopyrightLayer;
+        default:
             
-            if (_metadataLayer==nil)
+            if (_audioMainScreen==NO || _mainScreen==YES)
             {
-                CGColorRef tTranslucidBlackColor=CGColorCreateGenericGray(0.0,0.5);
-                CGRect tRect=_backgroundLayer.bounds;
-                
-                tRect.size.height=70;
-                
-                // Dark Background
-                
-                _metadataLayer=[CALayer layer];
-                
-                _metadataLayer.frame=tRect;
-                _metadataLayer.backgroundColor=tTranslucidBlackColor;
-                
-                CFRelease(tTranslucidBlackColor);
-                
-                [_backgroundLayer insertSublayer:_metadataLayer
-                                           above:_AVPlayerLayer];
-                
-                _metadataLayer.opacity=0.0f;
-                
-                tTitleLayer=[CATextLayer layer];
-                
-                tTitleLayer.font=@"Lucida Grande Bold";
-                tTitleLayer.fontSize=35;
-                tTitleLayer.foregroundColor=CGColorGetConstantColor(kCGColorWhite);
-                tTitleLayer.frame=CGRectMake(12, 25, tRect.size.width-12,40);
-                
-                [_metadataLayer addSublayer:tTitleLayer];
-                
-                tCopyrightLayer=[CATextLayer layer];
-                
-                tCopyrightLayer.font=@"Lucida Grande";
-                tCopyrightLayer.fontSize=15;
-                tCopyrightLayer.foregroundColor=CGColorGetConstantColor(kCGColorWhite);
-                
-                tCopyrightLayer.frame=CGRectMake(12, 2, tRect.size.width-12,18);
-                
-                [_metadataLayer addSublayer:tCopyrightLayer];
+                _AVPlayerLayer.player.volume=(_liveMuted==YES) ? 0.0f :_volumeLevel;
             }
             else
             {
-                tTitleLayer=(CATextLayer *)[_metadataLayer sublayers][0];
-                tCopyrightLayer=(CATextLayer *)[_metadataLayer sublayers][1];
+                _AVPlayerLayer.player.volume=0;
             }
             
-            if (_metadadataMode==kMovieFrameShowMetadataPeriodically)
-            {
-                _timer=[[NSTimer scheduledTimerWithTimeInterval:_metadadataPeriod target:self selector:@selector(showMetadata:) userInfo:nil repeats:YES] retain];
-            }
+            break;
+    }
+    
+    NSValue * tValue=[preferredNextAssetDictionary objectForKey:SHAssetTimeKey];
+    
+    if (tValue!=nil)
+    {
+        CMTime tSeekTime=[tValue CMTimeValue];
+        
+        [_AVPlayerLayer.player seekToTime:tSeekTime toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+    }
+    
+    // Update assets playing list
+    
+    [[SHPlayingAssetsRegister sharedRegister] addAsset:tAsset.URL];
+    
+    [_AVPlayerLayer.player play];
+    
+    if (_preview==NO && _showMetadata==YES)
+    {
+        CATextLayer * tTitleLayer;
+        CATextLayer * tCopyrightLayer;
+        
+        if (_metadataLayer==nil)
+        {
+            CGColorRef tTranslucidBlackColor=CGColorCreateGenericGray(0.0,0.5);
+            CGRect tRect=_backgroundLayer.bounds;
             
-            [tAVPlayerItem.asset loadValuesAsynchronouslyForKeys:[NSArray arrayWithObject:@"availableMetadataFormats"] completionHandler:^(){
-             
-                 if ([tAVPlayerItem.asset statusOfValueForKey:@"availableMetadataFormats" error:NULL]==AVKeyValueStatusLoaded)
+            tRect.size.height=70;
+            
+            // Dark Background
+            
+            _metadataLayer=[CALayer layer];
+            
+            _metadataLayer.frame=tRect;
+            _metadataLayer.backgroundColor=tTranslucidBlackColor;
+            
+            CFRelease(tTranslucidBlackColor);
+            
+            [_backgroundLayer insertSublayer:_metadataLayer
+                                       above:_AVPlayerLayer];
+            
+            _metadataLayer.opacity=0.0f;
+            
+            tTitleLayer=[CATextLayer layer];
+            
+            tTitleLayer.font=@"Lucida Grande Bold";
+            tTitleLayer.fontSize=35;
+            tTitleLayer.foregroundColor=CGColorGetConstantColor(kCGColorWhite);
+            tTitleLayer.frame=CGRectMake(12, 25, tRect.size.width-12,40);
+            
+            [_metadataLayer addSublayer:tTitleLayer];
+            
+            tCopyrightLayer=[CATextLayer layer];
+            
+            tCopyrightLayer.font=@"Lucida Grande";
+            tCopyrightLayer.fontSize=15;
+            tCopyrightLayer.foregroundColor=CGColorGetConstantColor(kCGColorWhite);
+            
+            tCopyrightLayer.frame=CGRectMake(12, 2, tRect.size.width-12,18);
+            
+            [_metadataLayer addSublayer:tCopyrightLayer];
+        }
+        else
+        {
+            tTitleLayer=(CATextLayer *)[_metadataLayer sublayers][0];
+            tCopyrightLayer=(CATextLayer *)[_metadataLayer sublayers][1];
+        }
+        
+        if (_metadadataMode==kMovieFrameShowMetadataPeriodically)
+        {
+            _timer=[[NSTimer scheduledTimerWithTimeInterval:_metadadataPeriod target:self selector:@selector(showMetadata:) userInfo:nil repeats:YES] retain];
+        }
+        
+        [tAVPlayerItem.asset loadValuesAsynchronouslyForKeys:[NSArray arrayWithObject:@"availableMetadataFormats"] completionHandler:^(){
+         
+             if ([tAVPlayerItem.asset statusOfValueForKey:@"availableMetadataFormats" error:NULL]==AVKeyValueStatusLoaded)
+             {
+                 NSArray * tAvailableMetadataFormats=[tAVPlayerItem.asset availableMetadataFormats];
+                 
+                 if ([tAvailableMetadataFormats containsObject:AVMetadataFormatQuickTimeUserData]==YES)
                  {
-                     NSArray * tAvailableMetadataFormats=[tAVPlayerItem.asset availableMetadataFormats];
+                     NSArray * tMetadata=[tAVPlayerItem.asset metadataForFormat:AVMetadataFormatQuickTimeUserData];
+                     NSArray * tMetadataItemsArray;
+                 
+                     // Title
                      
-                     if ([tAvailableMetadataFormats containsObject:AVMetadataFormatQuickTimeUserData]==YES)
+                     if (_currentAssetMetadataTitle==nil)
                      {
-                         NSArray * tMetadata=[tAVPlayerItem.asset metadataForFormat:AVMetadataFormatQuickTimeUserData];
-                         NSArray * tMetadataItemsArray;
+                         tMetadataItemsArray=[AVMetadataItem metadataItemsFromArray:tMetadata
+                                                                            withKey:AVMetadataCommonKeyTitle
+                                                                           keySpace:AVMetadataKeySpaceCommon];
+                         
+                         if ([tMetadataItemsArray count]>0)
+                         {
+                             _currentAssetMetadataTitle=[[NSString alloc] initWithString:[tMetadataItemsArray[0] stringValue]];
+                         }
+                     }
                      
-                         // Title
-                         
-                         if (_currentAssetMetadataTitle==nil)
+                     // Copyrights
+                     
+                     if (_currentAssetMetadataCopyrights==nil)
+                     {
+                         tMetadataItemsArray=[AVMetadataItem metadataItemsFromArray:tMetadata
+                                                                            withKey:AVMetadataCommonKeyCopyrights
+                                                                           keySpace:AVMetadataKeySpaceCommon];
+                     
+                         if ([tMetadataItemsArray count]>0)
                          {
-                             tMetadataItemsArray=[AVMetadataItem metadataItemsFromArray:tMetadata
-                                                                                withKey:AVMetadataCommonKeyTitle
-                                                                               keySpace:AVMetadataKeySpaceCommon];
-                             
-                             if ([tMetadataItemsArray count]>0)
-                             {
-                                 _currentAssetMetadataTitle=[[NSString alloc] initWithString:[tMetadataItemsArray[0] stringValue]];
-                             }
+                             _currentAssetMetadataCopyrights=[[NSString alloc] initWithString:[tMetadataItemsArray[0] stringValue]];
                          }
+                     }
+                     
+                     if (_currentAssetMetadataTitle!=nil || _currentAssetMetadataCopyrights!=nil)
+                     {
+                         tTitleLayer.string=_currentAssetMetadataTitle;
+                         tCopyrightLayer.string=_currentAssetMetadataCopyrights;
                          
-                         // Copyrights
-                         
-                         if (_currentAssetMetadataCopyrights==nil)
+                         if (_metadadataMode==kMovieFrameShowMetadataAtStart)
                          {
-                             tMetadataItemsArray=[AVMetadataItem metadataItemsFromArray:tMetadata
-                                                                                withKey:AVMetadataCommonKeyCopyrights
-                                                                               keySpace:AVMetadataKeySpaceCommon];
-                         
-                             if ([tMetadataItemsArray count]>0)
-                             {
-                                 _currentAssetMetadataCopyrights=[[NSString alloc] initWithString:[tMetadataItemsArray[0] stringValue]];
-                             }
-                         }
-                         
-                         if (_currentAssetMetadataTitle!=nil || _currentAssetMetadataCopyrights!=nil)
-                         {
-                             tTitleLayer.string=_currentAssetMetadataTitle;
-                             tCopyrightLayer.string=_currentAssetMetadataCopyrights;
-                             
-                             if (_metadadataMode==kMovieFrameShowMetadataAtStart)
-                             {
-                                 [self performSelectorOnMainThread:@selector(showMetadata:)
-                                                        withObject:nil
-                                                     waitUntilDone:NO];
-                             }
+                             [self performSelectorOnMainThread:@selector(showMetadata:)
+                                                    withObject:nil
+                                                 waitUntilDone:NO];
                          }
                      }
                  }
-             }];
-         }
+             }
+         }];
     }
     
     return YES;
@@ -1090,6 +1119,10 @@ NSUInteger random_no(NSUInteger n)
 {
     if (inPlayerItem==_AVPlayerLayer.player.currentItem)
     {
+        // Update assets playing list
+        
+        [[SHPlayingAssetsRegister sharedRegister] removeAsset:((AVURLAsset *)inPlayerItem.asset).URL];
+        
         AVPlayer * tCurrentPlayer=[_AVPlayerLayer player];
         
         if (_timer!=nil)
@@ -1139,7 +1172,7 @@ NSUInteger random_no(NSUInteger n)
         
         __arrayIndex++;
         
-        if ([self playNextAsset:nil]==NO)
+        if ([self playNextAsset:nil canPlaySameRandomMovieTwice:NO]==NO)
         {
             // A COMPLETER
         }
