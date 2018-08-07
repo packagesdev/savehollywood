@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2012-2016, Stephane Sudre
+ Copyright (c) 2012-2017, Stephane Sudre
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -303,10 +303,7 @@ NSUInteger random_no(NSUInteger n)
         
         if (_backgroundLayer!=nil)
         {
-            NSColor * tColor=nil;
-            CGFloat tColorComponents[4];
-            CGColorRef tCGColorRef;
-            NSMutableArray * tAssets;
+            
             
             // Frame
             
@@ -330,6 +327,7 @@ NSUInteger random_no(NSUInteger n)
             
                 // Background Color
             
+            NSColor * tColor=nil;
             NSString * tString=[tDefaults stringForKey:SHUserDefaultsBackgroundColor];
             
             if (tString!=nil)
@@ -337,17 +335,8 @@ NSUInteger random_no(NSUInteger n)
             
             if (tColor==nil)
                 tColor=[NSColor blackColor];
-                
-            [tColor getComponents:tColorComponents];
             
-            tCGColorRef=CGColorCreateGenericRGB(tColorComponents[0],tColorComponents[1],tColorComponents[2], tColorComponents[3]);
-            
-            if (tCGColorRef!=NULL)
-            {
-                _backgroundLayer.backgroundColor=tCGColorRef;
-            
-                CFRelease(tCGColorRef);
-            }
+            _backgroundLayer.backgroundColor=[tColor CGColor];
             
             // Audio
             
@@ -393,7 +382,7 @@ NSUInteger random_no(NSUInteger n)
             
             NSArray * tDefaultsArray=[tDefaults objectForKey:SHUserDefaultsAssetsLibrary];
             
-            tAssets=[NSMutableArray array];
+            NSMutableArray * tAssets=[NSMutableArray array];
             
             for(NSString * tPath in tDefaultsArray)
             {
