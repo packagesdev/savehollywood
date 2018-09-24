@@ -156,7 +156,8 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
     
         if (tImage!=nil)
         {
-            [_volumeMuteButton setImage:tImage];
+            [tImage setTemplate:YES];
+			[_volumeMuteButton setImage:tImage];
             [tImage release];
         }
     }
@@ -169,6 +170,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
         
         if (tImage!=nil)
         {
+			[tImage setTemplate:YES];
             [_volumeFullButton setImage:tImage];
             [tImage release];
         }
