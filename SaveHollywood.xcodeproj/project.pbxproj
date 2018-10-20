@@ -414,7 +414,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SaveHollywood/SaveHollywood-Prefix.pch";
 				INFOPLIST_FILE = "SaveHollywood/SaveHollywood-Info.plist";
@@ -429,7 +429,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SaveHollywood/SaveHollywood-Prefix.pch";
 				INFOPLIST_FILE = "SaveHollywood/SaveHollywood-Info.plist";

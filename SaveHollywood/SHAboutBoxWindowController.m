@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2012-2016, Stephane Sudre
+ Copyright (c) 2012-2018, Stephane Sudre
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -33,11 +33,11 @@
 	[super windowDidLoad];
     
     NSBundle * tBundle=[NSBundle bundleForClass:[self class]];
-    NSDictionary * tInfoDictionary=[tBundle infoDictionary];
+    NSDictionary * tInfoDictionary=tBundle.infoDictionary;
     
-    [_versionLabel setStringValue:[NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"Version %@ (%@)",@"Localized",tBundle,@""),tInfoDictionary[@"CFBundleShortVersionString"],tInfoDictionary[@"CFBundleVersion"]]];
+    _versionLabel.stringValue=[NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"Version %@ (%@)",@"Localized",tBundle,@""),tInfoDictionary[@"CFBundleShortVersionString"],tInfoDictionary[@"CFBundleVersion"]];
     
-    [_copyrightLabel setStringValue:[NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"Legal terms",@"Localized",tBundle,@""),[[NSCalendarDate date] yearOfCommonEra]]];
+    _copyrightLabel.stringValue=[NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"Legal terms",@"Localized",tBundle,@""),[[NSCalendarDate date] yearOfCommonEra]];
 }
 
 @end

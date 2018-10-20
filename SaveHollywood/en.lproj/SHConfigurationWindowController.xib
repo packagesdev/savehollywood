@@ -586,7 +586,7 @@ y7bMNcy1zTXNtc42zrbPN8+40DnQutE80b7SP9LB00TTxtRJ1MvVTtXR1lXW2Ndc1+DYZNjo2WzZ8dp2
 											<string key="NSFrameSize">{381, 108}</string>
 											<reference key="NSSuperview" ref="632238767"/>
 											<reference key="NSWindow"/>
-											<reference key="NSNextKeyView" ref="917768749"/>
+											<reference key="NSNextKeyView" ref="15712993"/>
 											<bool key="NSEnabled">YES</bool>
 											<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 											<bool key="NSControlAllowsExpansionToolTips">YES</bool>
@@ -706,7 +706,7 @@ y7bMNcy1zTXNtc42zrbPN8+40DnQutE80b7SP9LB00TTxtRJ1MvVTtXR1lXW2Ndc1+DYZNjo2WzZ8dp2
 							<string key="NSFrame">{{20, 612}, {398, 110}}</string>
 							<reference key="NSSuperview" ref="1006"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView" ref="15712993"/>
+							<reference key="NSNextKeyView" ref="632238767"/>
 							<int key="NSsFlags">2066</int>
 							<reference key="NSVScroller" ref="213008854"/>
 							<reference key="NSHScroller" ref="15712993"/>
