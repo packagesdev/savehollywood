@@ -23,6 +23,10 @@
 		F40B998B16AB1F6200644F61 /* NSColor+String.h in Headers */ = {isa = PBXBuildFile; fileRef = F40B998916AB1F6200644F61 /* NSColor+String.h */; };
 		F40B998C16AB1F6200644F61 /* NSColor+String.m in Sources */ = {isa = PBXBuildFile; fileRef = F40B998A16AB1F6200644F61 /* NSColor+String.m */; };
 		F434961B16B701B500C549DF /* Localized.strings in Resources */ = {isa = PBXBuildFile; fileRef = F434961916B701B500C549DF /* Localized.strings */; };
+		F45A65182117329400E5A4D4 /* SHPlayingAssetsRegister.h in Headers */ = {isa = PBXBuildFile; fileRef = F45A65162117329400E5A4D4 /* SHPlayingAssetsRegister.h */; };
+		F45A65192117329400E5A4D4 /* SHPlayingAssetsRegister.m in Sources */ = {isa = PBXBuildFile; fileRef = F45A65172117329400E5A4D4 /* SHPlayingAssetsRegister.m */; };
+		F4875FC5211A50F1007D8759 /* SHView.h in Headers */ = {isa = PBXBuildFile; fileRef = F4875FC3211A50F1007D8759 /* SHView.h */; };
+		F4875FC6211A50F1007D8759 /* SHView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4875FC4211A50F1007D8759 /* SHView.m */; };
 		F4AB34BE16BED1CF00015DB9 /* SHAssetTableCellView.h in Headers */ = {isa = PBXBuildFile; fileRef = F4AB34BC16BED1CF00015DB9 /* SHAssetTableCellView.h */; };
 		F4AB34BF16BED1CF00015DB9 /* SHAssetTableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4AB34BD16BED1CF00015DB9 /* SHAssetTableCellView.m */; };
 		F4B3933316ED43C40061B52E /* SHSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = F4B3933116ED43C40061B52E /* SHSlider.h */; };
@@ -67,6 +71,10 @@
 		F40B998A16AB1F6200644F61 /* NSColor+String.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+String.m"; sourceTree = "<group>"; };
 		F4121CCC16FD06200059A794 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localized.strings; sourceTree = "<group>"; };
 		F434961A16B701B500C549DF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localized.strings; sourceTree = "<group>"; };
+		F45A65162117329400E5A4D4 /* SHPlayingAssetsRegister.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHPlayingAssetsRegister.h; sourceTree = "<group>"; };
+		F45A65172117329400E5A4D4 /* SHPlayingAssetsRegister.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHPlayingAssetsRegister.m; sourceTree = "<group>"; };
+		F4875FC3211A50F1007D8759 /* SHView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHView.h; sourceTree = "<group>"; };
+		F4875FC4211A50F1007D8759 /* SHView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHView.m; sourceTree = "<group>"; };
 		F4AB34BC16BED1CF00015DB9 /* SHAssetTableCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHAssetTableCellView.h; sourceTree = "<group>"; };
 		F4AB34BD16BED1CF00015DB9 /* SHAssetTableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHAssetTableCellView.m; sourceTree = "<group>"; };
 		F4B3933116ED43C40061B52E /* SHSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHSlider.h; sourceTree = "<group>"; };
@@ -153,6 +161,8 @@
 				F4BC1E3716B4936200A580F9 /* NSArray+Shuffle.m */,
 				F4015D1D169CB47D00560296 /* SHUserDefaults+Constants.h */,
 				F4015D1E169CB47D00560296 /* SHUserDefaults+Constants.m */,
+				F45A65162117329400E5A4D4 /* SHPlayingAssetsRegister.h */,
+				F45A65172117329400E5A4D4 /* SHPlayingAssetsRegister.m */,
 				F40427DD169B76CB00B146F7 /* SaveHollywoodView.h */,
 				F40427DE169B76CB00B146F7 /* SaveHollywoodView.m */,
 				F40BA60F16BEC6C000154844 /* Configuration */,
@@ -190,6 +200,8 @@
 		F40BA61116BEC6D700154844 /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
+				F4875FC3211A50F1007D8759 /* SHView.h */,
+				F4875FC4211A50F1007D8759 /* SHView.m */,
 				F4BB43A316BD387100443067 /* SHSecondaryBox.h */,
 				F4BB43A416BD387100443067 /* SHSecondaryBox.m */,
 				F4BB43AF16BD3A9B00443067 /* SHLightGrayBackgroundView.h */,
@@ -221,6 +233,8 @@
 				F4B9BCEE16D54A8B00051854 /* NSIndexSet+Analysis.h in Headers */,
 				F405C93016DC01D700EFDF39 /* SHTokenView.h in Headers */,
 				F4B3933316ED43C40061B52E /* SHSlider.h in Headers */,
+				F4875FC5211A50F1007D8759 /* SHView.h in Headers */,
+				F45A65182117329400E5A4D4 /* SHPlayingAssetsRegister.h in Headers */,
 				F4EF51BC16FA281500D1A5C6 /* SHAboutBoxWindowController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -308,6 +322,8 @@
 			files = (
 				F40427DF169B76CB00B146F7 /* SaveHollywoodView.m in Sources */,
 				F4015D20169CB47D00560296 /* SHUserDefaults+Constants.m in Sources */,
+				F45A65192117329400E5A4D4 /* SHPlayingAssetsRegister.m in Sources */,
+				F4875FC6211A50F1007D8759 /* SHView.m in Sources */,
 				F4015D1A169CB3C000560296 /* SHConfigurationWindowController.m in Sources */,
 				F40B998C16AB1F6200644F61 /* NSColor+String.m in Sources */,
 				F4BC1E3916B4936200A580F9 /* NSArray+Shuffle.m in Sources */,
@@ -398,7 +414,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 9;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SaveHollywood/SaveHollywood-Prefix.pch";
 				INFOPLIST_FILE = "SaveHollywood/SaveHollywood-Info.plist";
@@ -413,7 +429,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 9;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SaveHollywood/SaveHollywood-Prefix.pch";
 				INFOPLIST_FILE = "SaveHollywood/SaveHollywood-Info.plist";

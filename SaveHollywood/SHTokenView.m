@@ -43,18 +43,18 @@ CGFloat heightForStringDrawing(NSAttributedString *myString, CGFloat myWidth)
     if (self!=nil)
     {
         NSMutableParagraphStyle * tMutableParagraphStyle=[[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-        NSShadow * tShadow=[NSShadow new];
+        tMutableParagraphStyle.alignment=NSCenterTextAlignment;
         
-        [tMutableParagraphStyle setAlignment:NSCenterTextAlignment];
+		NSShadow * tShadow=[NSShadow new];
+		tShadow.shadowOffset=NSMakeSize(0,-1);
+		tShadow.shadowColor=[NSColor colorWithDeviceWhite:0.65 alpha:1.0];
         
-        [tShadow setShadowOffset:NSMakeSize(0,-1)];
-        [tShadow setShadowColor:[NSColor colorWithDeviceWhite:0.65 alpha:1.0]];
-        
-        _attributesDictionary=[[NSDictionary alloc] initWithObjectsAndKeys:[NSColor whiteColor],NSForegroundColorAttributeName,
-                                                                          [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSRegularControlSize]],NSFontAttributeName,
-                                                                          tMutableParagraphStyle,NSParagraphStyleAttributeName,
-                                                                          tShadow,NSShadowAttributeName,
-                                                                          nil];
+		_attributesDictionary=[@{NSForegroundColorAttributeName:[NSColor whiteColor],
+								NSFontAttributeName:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSRegularControlSize]],
+								NSParagraphStyleAttributeName:tMutableParagraphStyle,
+								 NSShadowAttributeName:tShadow} copy];
+								
+		
         [tMutableParagraphStyle release];
         [tShadow release];
     }
@@ -71,8 +71,6 @@ CGFloat heightForStringDrawing(NSAttributedString *myString, CGFloat myWidth)
 
 - (void)setStringValue:(NSString *)inValue
 {
-    
-    
     [_cachedStringValue release];
     
     _cachedStringValue=[[NSAttributedString alloc] initWithString:inValue

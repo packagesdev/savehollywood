@@ -12,9 +12,9 @@
     
         if ([tComponents count]==3)
         {
-            tColor=[NSColor colorWithCalibratedRed:[[tComponents objectAtIndex:0] floatValue]
-                                             green:[[tComponents objectAtIndex:1] floatValue]
-                                              blue:[[tComponents objectAtIndex:2] floatValue]
+            tColor=[NSColor colorWithCalibratedRed:[tComponents[0] floatValue]
+                                             green:[tComponents[1] floatValue]
+                                              blue:[tComponents[2] floatValue]
                                              alpha:1.0];
         }
     }
