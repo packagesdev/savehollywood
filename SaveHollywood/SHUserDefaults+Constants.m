@@ -12,26 +12,3 @@
  */
 
 #import "SHUserDefaults+Constants.h"
-
-NSString * const SHUserDefaultsAssetsRandomOrder=@"assets.randomOrder";
-NSString * const SHUserDefaultsAssetsStartWhereLeftOff=@"assets.startWhereLeftOff";
-NSString * const SHUserDefaultsAssetsLibrary=@"assets.library";
-
-NSString * const SHUserDefaultsFrameScaling=@"frame.scaling";
-NSString * const SHUserDefaultsFrameRandomPosition=@"frame.randomPosition";
-
-NSString * const SHUserDefaultsFrameDrawBorder=@"frame.drawBorder";
-NSString * const SHUserDefaultsFrameShowMetadata=@"frame.showMetadata";
-NSString * const SHUserDefaultsFrameShowMetadataMode=@"frame.showMetadata.mode";
-NSString * const SHUserDefaultsFrameShowMetadataPeriod=@"frame.showMetadata.period";
-
-
-NSString * const SHUserDefaultsBackgroundColor=@"frame.background.color";
-
-NSString * const SHUserDefaultsAudioMainDisplayOnly=@"movie.audio.mainDisplayOnly";
-
-NSString * const SHUserDefaultsMovieVolumeMode=@"movie.volume.mode";
-
-NSString * const SHUserDefaultsMovieVolumeCustomValue=@"movie.volume.value";
-
-NSString * const SHUserDefaultsMainDisplayOnly=@"screen.mainDisplayOnly";

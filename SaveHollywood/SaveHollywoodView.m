@@ -14,7 +14,9 @@
 #import "SaveHollywoodView.h"
 #import "SHConfigurationWindowController.h"
 
-#import "SHUserDefaults+Constants.h"
+//#import "SHUserDefaults+Constants.h"
+
+#import "SHSettings.h"
 
 #import "SHPlayingAssetsRegister.h"
 
@@ -52,7 +54,7 @@ NSUInteger random_no(NSUInteger n)
     BOOL _preview;
     BOOL _mainScreen;
     
-    NSInteger _scaling;
+    SHMovieScaling _scaling;
     BOOL _randomPosition;
     
     BOOL _drawBorder;
@@ -65,7 +67,7 @@ NSUInteger random_no(NSUInteger n)
     BOOL _volumeLevelHasBeenModified;
     
     BOOL _audioMainScreen;
-    NSInteger _volumeMode;
+    SHMovieAudioVolumeMode _volumeMode;
     float _volumeLevel;
     
 	// Workaround for Apple bug in Sierra
@@ -187,7 +189,7 @@ NSUInteger random_no(NSUInteger n)
 {
     if (_preview==NO)
     {
-        BOOL tCanChangeVolume=(_volumeMode!=kMovieVolumeMute);
+        BOOL tCanChangeVolume=(_volumeMode!=SHMovieAudioVolumeMute);
         
         NSString * tString=[inEvent characters];
         NSUInteger tLength=[tString length];
@@ -281,10 +283,12 @@ NSUInteger random_no(NSUInteger n)
     NSString *tIdentifier = [[NSBundle bundleForClass:[self class]] bundleIdentifier];
     ScreenSaverDefaults *tDefaults = [ScreenSaverDefaults defaultsForModuleWithName:tIdentifier];
 
-    [super startAnimation];
+	SHSettings * tSettings=[SHSettings settings];
+	
+	[super startAnimation];
 #endif
     
-     BOOL tBool=[tDefaults boolForKey:SHUserDefaultsMainDisplayOnly];
+	BOOL tBool=tSettings.mainDisplayOnly;
     
     if (tBool==NO || _mainScreen==YES)
     {
@@ -311,38 +315,29 @@ NSUInteger random_no(NSUInteger n)
             
                 // Scaling
             
-            _scaling=[tDefaults integerForKey:SHUserDefaultsFrameScaling];
+            _scaling=tSettings.scaling;
             
                 // Draw Border
             
-            _drawBorder=[tDefaults boolForKey:SHUserDefaultsFrameDrawBorder];
+            _drawBorder=tSettings.drawBorder;
             
-            _showMetadata=[tDefaults boolForKey:SHUserDefaultsFrameShowMetadata];
+            _showMetadata=tSettings.showMetadata;
             
-            _metadadataMode=[tDefaults integerForKey:SHUserDefaultsFrameShowMetadataMode];
+            _metadadataMode=tSettings.showMetadataMode;
             
-            _metadadataPeriod=[tDefaults integerForKey:SHUserDefaultsFrameShowMetadataPeriod];
+            _metadadataPeriod=tSettings.showMetadataPeriod;
             
                 // Random Position
             
-            _randomPosition=[tDefaults boolForKey:SHUserDefaultsFrameRandomPosition];
+            _randomPosition=tSettings.randomPosition;
             
                 // Background Color
             
-            NSColor * tColor=nil;
-            NSString * tString=[tDefaults stringForKey:SHUserDefaultsBackgroundColor];
-            
-            if (tString!=nil)
-                tColor=[NSColor colorFromString:tString];
-            
-            if (tColor==nil)
-                tColor=[NSColor blackColor];
-            
-            _backgroundLayer.backgroundColor=[tColor CGColor];
+            _backgroundLayer.backgroundColor=[tSettings.backgroundColor CGColor];
             
             // Audio
             
-            _audioMainScreen=[tDefaults boolForKey:SHUserDefaultsAudioMainDisplayOnly];
+            _audioMainScreen=tSettings.audioMainScreenOnly;
             
             // Volume
             
@@ -350,39 +345,32 @@ NSUInteger random_no(NSUInteger n)
 
                 // Mode
             
-            _volumeMode=[tDefaults integerForKey:SHUserDefaultsMovieVolumeMode];
+            _volumeMode=tSettings.audioMode;
             
                 // Custom Value
             
-            id tObject=[tDefaults objectForKey:SHUserDefaultsMovieVolumeCustomValue];
+            _volumeLevel=tSettings.audioVolume;
             
-            if (tObject==nil)
-                _volumeLevel=1.0f;
-            else
-            {
-                _volumeLevel=[tDefaults floatForKey:SHUserDefaultsMovieVolumeCustomValue];
-            
-                if (_volumeLevel<0.0f)
-                {
-                    _volumeLevel=0.0f;
-                }
-                else if (_volumeLevel>1.0f)
-                {
-                    _volumeLevel=1.0f;
-                }
+			if (_volumeLevel<0.0f)
+			{
+				_volumeLevel=0.0f;
+			}
+			else if (_volumeLevel>1.0f)
+			{
+				_volumeLevel=1.0f;
             }
             
             // Assets
             
                 // Random Order
             
-            _randomOrder=[tDefaults boolForKey:SHUserDefaultsAssetsRandomOrder];
+            _randomOrder=tSettings.randomOrder;
             
                 // List
             
             __arrayIndex=0;
             
-            NSArray * tDefaultsArray=[tDefaults objectForKey:SHUserDefaultsAssetsLibrary];
+            NSArray * tDefaultsArray=tSettings.assets;
             
             NSMutableArray * tAssets=[NSMutableArray array];
             
@@ -508,7 +496,7 @@ NSUInteger random_no(NSUInteger n)
 								else
 									tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKey,(unsigned long)tScreenIndex];
 								
-								if ([tDefaults boolForKey:SHUserDefaultsAssetsStartWhereLeftOff]==YES)
+								if (tSettings.startWhereLeftOff==YES)
                                 {
                                     NSData * tData=[tDefaults objectForKey:tScreenKey];
                                     
@@ -587,7 +575,9 @@ NSUInteger random_no(NSUInteger n)
     NSString *tIdentifier = [[NSBundle bundleForClass:[self class]] bundleIdentifier];
     ScreenSaverDefaults *tDefaults = [ScreenSaverDefaults defaultsForModuleWithName:tIdentifier];
 #endif
-    
+	
+	SHSettings * tSettings=[SHSettings settings];
+	
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideMetadata:) object:nil];
     
     // Remove observers
@@ -615,7 +605,7 @@ NSUInteger random_no(NSUInteger n)
 			else
 				tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKey,(unsigned long)tScreenIndex];
             
-            if ([tDefaults boolForKey:SHUserDefaultsAssetsStartWhereLeftOff]==YES)
+            if (tSettings.startWhereLeftOff==YES)
             {
                 NSURL * tCurrentURL=[((AVURLAsset *) _AVPlayerLayer.player.currentItem.asset) URL];
                 
@@ -830,7 +820,7 @@ NSUInteger random_no(NSUInteger n)
     CGRect tBackgroundFrame=_backgroundLayer.bounds;
     CGRect tFrame=tBackgroundFrame;
     
-    if (_scaling==kMovieFrameActualSize)
+    if (_scaling==SHMovieScaleNone)
     {
         CGSize tAssetSize=tAsset.naturalSize;
         
@@ -880,7 +870,7 @@ NSUInteger random_no(NSUInteger n)
     }
     else
     {
-        if (_scaling==kMovieFrameSizeToFill)
+        if (_scaling==SHMovieScaleAxesIndependently)
             _AVPlayerLayer.videoGravity=AVLayerVideoGravityResizeAspectFill;
         else
             _AVPlayerLayer.videoGravity=AVLayerVideoGravityResizeAspect;
@@ -902,13 +892,13 @@ NSUInteger random_no(NSUInteger n)
     
     switch(_volumeMode)
     {
-        case kMovieVolumeMute:
+        case SHMovieAudioVolumeMute:
             
             _AVPlayerLayer.player.volume=0.0;
             
             break;
             
-        case kMovieVolumeNormal:
+        case SHMovieAudioVolumeNormal:
         
             if (_volumeLevelHasBeenModified==NO)
             {
@@ -1085,12 +1075,12 @@ NSUInteger random_no(NSUInteger n)
 
 - (BOOL)hasConfigureSheet
 {
-    return YES;
+    return ([SHSettings isConfigurationLocked]==NO);
 }
 
 - (NSWindow*)configureSheet
 {
-    if (_configurationWindowController==nil)
+	if (_configurationWindowController==nil)
 		_configurationWindowController=[[SHConfigurationWindowController alloc] init];
     
     NSWindow * tWindow=_configurationWindowController.window;
@@ -1099,8 +1089,6 @@ NSUInteger random_no(NSUInteger n)
     
     return tWindow;
 }
-
-
 
 #pragma mark - Player Item Observer
 
