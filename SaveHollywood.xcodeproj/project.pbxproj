@@ -11,11 +11,7 @@
 		F4015D1A169CB3C000560296 /* SHConfigurationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4015D17169CB3C000560296 /* SHConfigurationWindowController.m */; };
 		F4015D1F169CB47D00560296 /* SHUserDefaults+Constants.h in Headers */ = {isa = PBXBuildFile; fileRef = F4015D1D169CB47D00560296 /* SHUserDefaults+Constants.h */; };
 		F4015D20169CB47D00560296 /* SHUserDefaults+Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = F4015D1E169CB47D00560296 /* SHUserDefaults+Constants.m */; };
-		F40427CF169B76CB00B146F7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F40427CE169B76CB00B146F7 /* Cocoa.framework */; };
-		F40427D1169B76CB00B146F7 /* ScreenSaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F40427D0169B76CB00B146F7 /* ScreenSaver.framework */; };
 		F40427DF169B76CB00B146F7 /* SaveHollywoodView.m in Sources */ = {isa = PBXBuildFile; fileRef = F40427DE169B76CB00B146F7 /* SaveHollywoodView.m */; };
-		F40427E6169B76E600B146F7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F40427E5169B76E600B146F7 /* AVFoundation.framework */; };
-		F40427E8169B76F600B146F7 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F40427E7169B76F600B146F7 /* CoreMedia.framework */; };
 		F405C93016DC01D700EFDF39 /* SHTokenView.h in Headers */ = {isa = PBXBuildFile; fileRef = F405C92E16DC01D700EFDF39 /* SHTokenView.h */; };
 		F405C93116DC01D700EFDF39 /* SHTokenView.m in Sources */ = {isa = PBXBuildFile; fileRef = F405C92F16DC01D700EFDF39 /* SHTokenView.m */; };
 		F4066EA7170760EA00EBE7D0 /* thumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = F4066EA5170760EA00EBE7D0 /* thumbnail.png */; };
@@ -23,6 +19,11 @@
 		F40B998B16AB1F6200644F61 /* NSColor+String.h in Headers */ = {isa = PBXBuildFile; fileRef = F40B998916AB1F6200644F61 /* NSColor+String.h */; };
 		F40B998C16AB1F6200644F61 /* NSColor+String.m in Sources */ = {isa = PBXBuildFile; fileRef = F40B998A16AB1F6200644F61 /* NSColor+String.m */; };
 		F434961B16B701B500C549DF /* Localized.strings in Resources */ = {isa = PBXBuildFile; fileRef = F434961916B701B500C549DF /* Localized.strings */; };
+		F44979572B53010100A1558A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F44979562B53010100A1558A /* Cocoa.framework */; };
+		F44979592B53010B00A1558A /* ScreenSaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F44979582B53010B00A1558A /* ScreenSaver.framework */; };
+		F449795B2B53011B00A1558A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F449795A2B53011B00A1558A /* AVFoundation.framework */; };
+		F449795D2B53017B00A1558A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F449795C2B53017B00A1558A /* CoreMedia.framework */; };
+		F449795F2B5301B200A1558A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F449795E2B5301B200A1558A /* QuartzCore.framework */; };
 		F45A65182117329400E5A4D4 /* SHPlayingAssetsRegister.h in Headers */ = {isa = PBXBuildFile; fileRef = F45A65162117329400E5A4D4 /* SHPlayingAssetsRegister.h */; };
 		F45A65192117329400E5A4D4 /* SHPlayingAssetsRegister.m in Sources */ = {isa = PBXBuildFile; fileRef = F45A65172117329400E5A4D4 /* SHPlayingAssetsRegister.m */; };
 		F4875FC5211A50F1007D8759 /* SHView.h in Headers */ = {isa = PBXBuildFile; fileRef = F4875FC3211A50F1007D8759 /* SHView.h */; };
@@ -41,7 +42,6 @@
 		F4BB43B216BD3A9B00443067 /* SHLightGrayBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4BB43B016BD3A9B00443067 /* SHLightGrayBackgroundView.m */; };
 		F4BC1E3816B4936200A580F9 /* NSArray+Shuffle.h in Headers */ = {isa = PBXBuildFile; fileRef = F4BC1E3616B4936200A580F9 /* NSArray+Shuffle.h */; };
 		F4BC1E3916B4936200A580F9 /* NSArray+Shuffle.m in Sources */ = {isa = PBXBuildFile; fileRef = F4BC1E3716B4936200A580F9 /* NSArray+Shuffle.m */; };
-		F4D817FC16B0A0390079D812 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4D817FB16B0A0390079D812 /* QuartzCore.framework */; };
 		F4DD2AA016FDBF30002A555F /* SHConfigurationWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4DD2A9D16FDBF30002A555F /* SHConfigurationWindowController.xib */; };
 		F4DD2AA316FDBF48002A555F /* SHConfigurationWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4DD2A9D16FDBF30002A555F /* SHConfigurationWindowController.xib */; };
 		F4DD2AA516FDBF73002A555F /* SHAboutBoxWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4DD2AA416FDBF73002A555F /* SHAboutBoxWindowController.xib */; };
@@ -55,16 +55,10 @@
 		F4015D1D169CB47D00560296 /* SHUserDefaults+Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SHUserDefaults+Constants.h"; sourceTree = "<group>"; };
 		F4015D1E169CB47D00560296 /* SHUserDefaults+Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SHUserDefaults+Constants.m"; sourceTree = "<group>"; };
 		F40427CB169B76CB00B146F7 /* SaveHollywood.saver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SaveHollywood.saver; sourceTree = BUILT_PRODUCTS_DIR; };
-		F40427CE169B76CB00B146F7 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		F40427D0169B76CB00B146F7 /* ScreenSaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScreenSaver.framework; path = System/Library/Frameworks/ScreenSaver.framework; sourceTree = SDKROOT; };
-		F40427D3169B76CB00B146F7 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		F40427D5169B76CB00B146F7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F40427D8169B76CB00B146F7 /* SaveHollywood-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SaveHollywood-Info.plist"; sourceTree = "<group>"; };
 		F40427DC169B76CB00B146F7 /* SaveHollywood-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SaveHollywood-Prefix.pch"; sourceTree = "<group>"; };
 		F40427DD169B76CB00B146F7 /* SaveHollywoodView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SaveHollywoodView.h; sourceTree = "<group>"; };
 		F40427DE169B76CB00B146F7 /* SaveHollywoodView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SaveHollywoodView.m; sourceTree = "<group>"; };
-		F40427E5169B76E600B146F7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		F40427E7169B76F600B146F7 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		F405C92E16DC01D700EFDF39 /* SHTokenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHTokenView.h; sourceTree = "<group>"; };
 		F405C92F16DC01D700EFDF39 /* SHTokenView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHTokenView.m; sourceTree = "<group>"; };
 		F4066EA5170760EA00EBE7D0 /* thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumbnail.png; sourceTree = "<group>"; };
@@ -73,6 +67,11 @@
 		F40B998A16AB1F6200644F61 /* NSColor+String.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+String.m"; sourceTree = "<group>"; };
 		F4121CCC16FD06200059A794 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localized.strings; sourceTree = "<group>"; };
 		F434961A16B701B500C549DF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localized.strings; sourceTree = "<group>"; };
+		F44979562B53010100A1558A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		F44979582B53010B00A1558A /* ScreenSaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScreenSaver.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/ScreenSaver.framework; sourceTree = DEVELOPER_DIR; };
+		F449795A2B53011B00A1558A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
+		F449795C2B53017B00A1558A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
+		F449795E2B5301B200A1558A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		F45A65162117329400E5A4D4 /* SHPlayingAssetsRegister.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHPlayingAssetsRegister.h; sourceTree = "<group>"; };
 		F45A65172117329400E5A4D4 /* SHPlayingAssetsRegister.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHPlayingAssetsRegister.m; sourceTree = "<group>"; };
 		F4875FC3211A50F1007D8759 /* SHView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHView.h; sourceTree = "<group>"; };
@@ -91,7 +90,6 @@
 		F4BB43B016BD3A9B00443067 /* SHLightGrayBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHLightGrayBackgroundView.m; sourceTree = "<group>"; };
 		F4BC1E3616B4936200A580F9 /* NSArray+Shuffle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Shuffle.h"; sourceTree = "<group>"; };
 		F4BC1E3716B4936200A580F9 /* NSArray+Shuffle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Shuffle.m"; sourceTree = "<group>"; };
-		F4D817FB16B0A0390079D812 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F4DD2A9E16FDBF30002A555F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SHConfigurationWindowController.xib; sourceTree = "<group>"; };
 		F4DD2AA216FDBF48002A555F /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/SHConfigurationWindowController.xib; sourceTree = "<group>"; };
 		F4DD2AA416FDBF73002A555F /* SHAboutBoxWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SHAboutBoxWindowController.xib; sourceTree = "<group>"; };
@@ -104,11 +102,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F40427CF169B76CB00B146F7 /* Cocoa.framework in Frameworks */,
-				F40427D1169B76CB00B146F7 /* ScreenSaver.framework in Frameworks */,
-				F40427E6169B76E600B146F7 /* AVFoundation.framework in Frameworks */,
-				F40427E8169B76F600B146F7 /* CoreMedia.framework in Frameworks */,
-				F4D817FC16B0A0390079D812 /* QuartzCore.framework in Frameworks */,
+				F449795F2B5301B200A1558A /* QuartzCore.framework in Frameworks */,
+				F449795D2B53017B00A1558A /* CoreMedia.framework in Frameworks */,
+				F449795B2B53011B00A1558A /* AVFoundation.framework in Frameworks */,
+				F44979592B53010B00A1558A /* ScreenSaver.framework in Frameworks */,
+				F44979572B53010100A1558A /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,23 +133,13 @@
 		F40427CD169B76CB00B146F7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F40427CE169B76CB00B146F7 /* Cocoa.framework */,
-				F40427D0169B76CB00B146F7 /* ScreenSaver.framework */,
-				F40427D2169B76CB00B146F7 /* Other Frameworks */,
+				F449795E2B5301B200A1558A /* QuartzCore.framework */,
+				F449795C2B53017B00A1558A /* CoreMedia.framework */,
+				F449795A2B53011B00A1558A /* AVFoundation.framework */,
+				F44979582B53010B00A1558A /* ScreenSaver.framework */,
+				F44979562B53010100A1558A /* Cocoa.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		F40427D2169B76CB00B146F7 /* Other Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				F4D817FB16B0A0390079D812 /* QuartzCore.framework */,
-				F40427E7169B76F600B146F7 /* CoreMedia.framework */,
-				F40427E5169B76E600B146F7 /* AVFoundation.framework */,
-				F40427D3169B76CB00B146F7 /* AppKit.framework */,
-				F40427D5169B76CB00B146F7 /* Foundation.framework */,
-			);
-			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
 		F40427D6169B76CB00B146F7 /* SaveHollywood */ = {
@@ -391,7 +379,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx10.9;
 			};
@@ -413,7 +401,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = macosx10.9;
 			};
 			name = Release;
@@ -428,6 +416,7 @@
 				INFOPLIST_FILE = "SaveHollywood/SaveHollywood-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				VERSIONING_SYSTEM = "apple-generic";
 				WRAPPER_EXTENSION = saver;
 			};
@@ -443,6 +432,7 @@
 				INFOPLIST_FILE = "SaveHollywood/SaveHollywood-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				VERSIONING_SYSTEM = "apple-generic";
 				WRAPPER_EXTENSION = saver;
 			};

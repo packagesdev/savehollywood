@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2012-2018, Stephane Sudre
+ Copyright (c) 2012-2024, Stephane Sudre
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -185,7 +185,7 @@ NSUInteger random_no(NSUInteger n)
 
 #pragma mark -
 
-- (void) keyDown:(NSEvent *) inEvent
+- (void)keyDown:(NSEvent *) inEvent
 {
     if (_preview==NO)
     {
